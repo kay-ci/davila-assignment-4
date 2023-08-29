@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Maze
 {
-    internal class MapVector : IMapVector
+    public class MapVector : IMapVector
     {
-        public bool IsValid => throw new NotImplementedException();
+        public bool IsValid { get; set; }
 
-        public int X => throw new NotImplementedException();
+        public int X { get; set; }
 
-        public int Y => throw new NotImplementedException();
+        public int Y { get; set; }
 
         public bool InsideBoundary(int width, int height)
         {

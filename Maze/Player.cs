@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Maze
 {
-    internal class Player : IPlayer
+    public class Player : IPlayer
     {
-        public Direction Facing => throw new NotImplementedException();
+        public Direction Facing { get; set; }
 
-        public MapVector Position => throw new NotImplementedException();
+        public MapVector Position { get; set; }
 
-        public int StartX => throw new NotImplementedException();
+        public int StartX { get; set; }
 
-        public int StartY => throw new NotImplementedException();
+        public int StartY { get; set; }
 
         public float GetRotation()
         {

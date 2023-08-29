@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Maze
 {
-    internal class Map : IMap
+    public class Map : IMap
     {
-        public MapVector Goal => throw new NotImplementedException();
+        public MapVector Goal { get; set; }
 
-        public int Height => throw new NotImplementedException();
+        public int Height { get; set; }
 
-        public bool IsGameFinished => throw new NotImplementedException();
+        public bool IsGameFinished { get; set; }
 
-        public Block[,] MapGrid => throw new NotImplementedException();
+        public Block[,] MapGrid {get; set;}
 
-        public IPlayer Player => throw new NotImplementedException();
+        public IPlayer Player {get; set;}
 
-        public int Width => throw new NotImplementedException();
+        public int Width { get; set; }
 
         public void CreateMap()
         {
