@@ -17,8 +17,13 @@ namespace Maze
         public Block[,] MapGrid {get; set;}
 
         public IPlayer Player {get; set;}
+        public IMapProvider MapProvider { get; set;}
 
         public int Width { get; set; }
+        public Map(IMapProvider mapProvider)
+        {
+            MapProvider = mapProvider;
+        }
 
         public void CreateMap()
         {
