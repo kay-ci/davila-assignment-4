@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a Player in the maze
     /// </summary>
-    public interface IPlayer
+    public interface IPlayer 
     {
         /// <summary>
         /// The direction the player is currently facing
