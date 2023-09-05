@@ -27,7 +27,18 @@ namespace Maze
 
         public void CreateMap()
         {
-            throw new NotImplementedException();
+            Direction[,] directionMaze = MapProvider.CreateMap();
+            MapGrid = new Block[directionMaze.GetLength(0), directionMaze.GetLength(1)];
+
+            //setting to solid block 
+            for (int i = 0; i < MapGrid.GetLength(0); i++) { 
+                for(int j = 0; j < MapGrid.GetLength(1); j++)
+                {
+                    MapGrid[i, j] = Block.Solid;
+                }
+            }
+
+            //how do we determine current location?
         }
 
         public void CreateMap(int width, int height)
