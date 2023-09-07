@@ -29,10 +29,11 @@ namespace Maze
         {
             Direction[,] directionMaze = MapProvider.CreateMap();
             MapGrid = new Block[directionMaze.GetLength(0), directionMaze.GetLength(1)];
-
+            int GridRows = MapGrid.GetLength(0)*2+1;
+            int GridCols = MapGrid.GetLength(1)*2+1;
             //setting to solid block 
-            for (int i = 0; i < MapGrid.GetLength(0); i++) { 
-                for(int j = 0; j < MapGrid.GetLength(1); j++)
+            for (int i = 0; i < GridRows; i++) { 
+                for(int j = 0; j < GridCols; j++)
                 {
                     MapGrid[i, j] = Block.Solid;
                 }
