@@ -6,37 +6,26 @@ public class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Welcome to Console Maze!");
-        Console.WriteLine("Please choose a MAZE size:");
-        Console.WriteLine("[1] 5x5 \n[2] 9x7\n[3] 9x13");
-        string input = Console.ReadLine();
-
-        switch (input)
-        {
-            case "1":
-                //load 5x5 maze
-                Test();
-                break;
-
-            case "2":
-                // load 9x7 maze
-                Test();
-                break;
-
-            case "3":
-                //load 9x13 maze
-                Test();
-                break;
-
-            default:
-                Console.WriteLine(" Please choose a valid maze size");
-                Console.WriteLine();
-                Console.ReadLine();
-                break;
-        }
-       
-
+        Console.WriteLine("Please enter path to maze:");
+        string input = "";
+        do{
+            input = Console.ReadLine();
+            try
+            {
+                GenerateMaze(input); 
+            }
+            catch (Exception e)
+            {   
+                Console.WriteLine(e.Message);
+                input = "";
+            }
+        } while (string.IsNullOrWhiteSpace(input));
     }
-    public static void Test() {
-        Console.WriteLine("good input"); ;
+    public static void GenerateMaze(string filePath) {
+        Map map = new Map(new MazeFromFile.MazeFromFile(filePath));
+        map.CreateMap();
+        Console.WriteLine("Height in blocks: " +map.Height);
+        Console.WriteLine("Width in blocks: " + map.Width);
+
     }
 }

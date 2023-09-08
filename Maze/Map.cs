@@ -9,6 +9,7 @@ namespace Maze
     public class Map : IMap
     {
         public MapVector Goal { get; set; }
+        public int Width { get; set; }
 
         public int Height { get; set; }
 
@@ -18,27 +19,38 @@ namespace Maze
 
         public IPlayer Player {get; set;}
         public IMapProvider MapProvider { get; set;}
+        private Direction [,] _directionMaze { get; set; }
 
-        public int Width { get; set; }
         public Map(IMapProvider mapProvider)
         {
             MapProvider = mapProvider;
+            _directionMaze = MapProvider.CreateMap();
         }
 
         public void CreateMap()
         {
-            Direction[,] directionMaze = MapProvider.CreateMap();
-            MapGrid = new Block[directionMaze.GetLength(0), directionMaze.GetLength(1)];
-            int GridRows = MapGrid.GetLength(0)*2+1;
-            int GridCols = MapGrid.GetLength(1)*2+1;
+            Height = _directionMaze.GetLength(0)*2+1;
+            Width = _directionMaze.GetLength(1)*2+1;
+
+            MapGrid = new Block[Height, Width];
+
             //setting to solid block 
-            for (int i = 0; i < GridRows; i++) { 
-                for(int j = 0; j < GridCols; j++)
+            for (int y = 0; y < Width; y++) { 
+                for(int x = 0; x < Height; x++)
                 {
-                    MapGrid[i, j] = Block.Solid;
+                    MapGrid[y, x] = Block.Solid;
+                    Console.Write(MapGrid[x,y]+ " ");
                 }
+                Console.WriteLine("\n");
             }
 
+            for (int x = 1;x < Height; x++)
+            {
+                for (int y = 1;y < Width; y++)
+                {
+                    
+                }
+            }
             //how do we determine current location?
         }
 
