@@ -18,7 +18,7 @@ namespace Maze
         public Block[,] MapGrid {get; set;}
 
         public IPlayer Player {get; set;}
-        public IMapProvider MapProvider { get; set;}
+        private readonly IMapProvider MapProvider;
         private Direction [,] _directionMaze { get; set; }
 
         public Map(IMapProvider mapProvider)
@@ -44,13 +44,39 @@ namespace Maze
                 Console.WriteLine("\n");
             }
 
-            for (int x = 1;x < Height; x++)
+            for (int y = 1;y < Height; y++)
             {
-                for (int y = 1;y < Width; y++)
+                for (int x = 1;x < Width; x++)
                 {
+                    MapGrid[y, x] = Block.Empty;
+
+                    //index out of bounds here
+                    Direction currentLocation = _directionMaze[x-1,y-1];
+
+                    var isEst = (currentLocation & Direction.E) > 0;
+                    var isSouth = (currentLocation & Direction.S) > 0;
+
+                    if (isEst)
+                    {
+                        MapGrid[y+1, x] = Block.Empty;
+                    }
+                    if (isSouth)
+                    {
+                        MapGrid[y, x+1] = Block.Empty;
+                    }
                     
                 }
+                
             }
+
+            for (int x=0; x < Height; x++) { 
+                for (int y = 0; y < Height; y++)
+                {
+                    Console.Write(MapGrid[x, y]);
+                }
+                Console.WriteLine("\n");
+            }
+
             //how do we determine current location?
         }
 
