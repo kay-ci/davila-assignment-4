@@ -5,39 +5,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
 
 namespace Maze.Tests
 {
     [TestClass()]
     public class MapTests
     { 
-        IMapProvider m_provider;
+        IMapProvider MapProvider { get; set; }
 
         [TestInitialize]
         public void Init()
         {
-            string filePath = "\"C:\\\\assignement01\\\\map9x7.txt\""; //needs to be changed to pass
-            m_provider = new MazeFromFile.MazeFromFile(filePath);
+            Direction[,] directionArray = new Direction[2, 2]
+            {
+                {Direction.E | Direction.S, Direction.S|Direction.W},
+                {Direction.N,Direction.N}
+            }; //mock return 
+            var m_provider = new Mock<IMapProvider>();
+            m_provider.Setup(s => s.CreateMap()).Returns(directionArray);
+
+            MapProvider = m_provider.Object;
         }
         [TestMethod()]
         public void MapTest()
         {
-            Map map = new Map(m_provider);
-
-            Assert.IsNotNull(map);
-            Assert.AreEqual(3, map._directionMaze.GetLength(1));
-            Assert.AreEqual(4, map._directionMaze.GetLength(0));
+            Map map = new Map(MapProvider);
+            Assert.IsNotNull(map._directionMaze);
+            Assert.AreEqual(2, map._directionMaze.GetLength(1));
+            Assert.AreEqual(2, map._directionMaze.GetLength(0));
         }
 
         [TestMethod()]
         public void CreateMapTest()
         {
-            Map map = new Map(m_provider);
+            Map map = new Map(MapProvider);
 
             map.CreateMap();
 
-            Assert.AreEqual(7, map.Height);
-            Assert.AreEqual(9, map.Width);
+            Assert.IsNotNull(map.MapGrid);
+            Assert.IsNotNull(map.Goal);
+            Assert.IsNotNull(map.Player);
+            Assert.AreEqual(5, map.Height);
+            Assert.AreEqual(5, map.Width);
         }
 
         [TestMethod()]
@@ -45,7 +55,7 @@ namespace Maze.Tests
         {
             //Arrange
             int value = 2;
-            Map map = new Map(m_provider);
+            Map map = new Map(MapProvider);
 
             //act
             int actual = map.ToGrid(value);
