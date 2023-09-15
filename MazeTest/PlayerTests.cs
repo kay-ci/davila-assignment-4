@@ -46,13 +46,13 @@ namespace Maze.Tests
             //Act
             float northR = player.GetRotation();
 
-            player.TurnRight();
+            player.Facing = Direction.E;
             float eastR = player.GetRotation();
 
-            player.TurnRight();
+            player.Facing = Direction.S;
             float southR = player.GetRotation();
 
-            player.TurnRight();
+            player.Facing = Direction.W;
             float westR = player.GetRotation();
 
             //Assert
@@ -61,29 +61,78 @@ namespace Maze.Tests
             Assert.AreEqual(3.141f, southR, 0.01);
             Assert.AreEqual(4.712f, westR, 0.01);
         }
-
+        [ExpectedException(typeof(InvalidOperationException))]
         [TestMethod()]
-        public void MoveBackwardTest()
+        public void InvalidRotation()
         {
             //Arrange
             int startX = 1;
             int startY = 1;
             Player player = new Player(startX, startY, mapGrid);
+            player.Facing = Direction.None;
+
+            player.GetRotation();
+
+        }
+        [DataRow(Direction.N, 1, 2)]
+        [DataRow(Direction.W, 2, 1)]
+        [TestMethod()]
+        public void MoveBackwardTest(Direction facing, int x, int y)
+        {
+            //Arrange
+            int startX = 1;
+            int startY = 1;
+            Player player = new Player(startX, startY, mapGrid);
+            player.Facing = facing;
+            //Act
+            player.MoveBackward();
+
+            //Assert
+            Assert.AreEqual(x, player.Position.X);
+            Assert.AreEqual(y, player.Position.Y);
+            
+        }
+       
+        [TestMethod()]
+        public void MoveBackwardFailTest(){
+            //Arrange
+            int startX = 1;
+            int startY = 3;
+            Player player = new Player(startX, startY, mapGrid);
+            
 
             //Act
             player.MoveBackward();
 
             //Assert
-            Assert.AreEqual(1, player.Position.X);
-            Assert.AreEqual(2, player.Position.Y);
-        }
+            Assert.AreEqual(1,player.Position.X);
+            Assert.AreEqual(3,player.Position.Y);
 
+        }
+        [DataRow(Direction.E, 2, 1)]
+        [DataRow(Direction.S, 1, 2)]
         [TestMethod()]
-        public void MoveForwardTest()
+        public void MoveForwardTest(Direction facing, int x, int y)
         {
             //Arrange
             int startX = 1;
-            int startY = 3;
+            int startY = 1;
+            Player player = new Player(startX, startY, mapGrid);
+            player.Facing = facing;
+
+            //Act
+            player.MoveForward();
+
+            //Assert
+            Assert.AreEqual(x, player.Position.X);
+            Assert.AreEqual(y, player.Position.Y);
+        }
+        [TestMethod()]
+        public void MoveForwardFailTest()
+        {
+            //Arrange
+            int startX = 1;
+            int startY = 1;
             Player player = new Player(startX, startY, mapGrid);
 
             //Act
