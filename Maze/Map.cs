@@ -124,18 +124,22 @@ namespace Maze
                 {
                     if (MapGrid[y, x] == Block.Empty)
                     {
-                        if (MapGrid[y, x] == MapGrid[Player.Position.Y, Player.Position.X])
-                        {
-                            Console.Write("P ");
-                        }
-                        else if (MapGrid[y, x] == MapGrid[Goal.Y, Goal.X])
+                        
+                        if (y == Goal.Y && x == Goal.X)
                         {
                             Console.Write("G ");
                         }
-                        else {
+                        else if (y == Player.Position.Y && x == Player.Position.X)
+                        {
+                            Console.Write("P ");
+                        }
+                        else
+                        {
                             Console.Write("  ");
                         }
                     }
+                    
+                    
                     else
                     {
                         Console.Write("* ");
