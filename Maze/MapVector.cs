@@ -70,19 +70,19 @@ namespace Maze
             MapVector convertedDirection;
             if (d.HasFlag(Direction.N))
             {
-                convertedDirection = new MapVector(1, 0);
+                convertedDirection = new MapVector(0, -1);
             }
             else if(d.HasFlag(Direction.E))
             {
-                convertedDirection = new MapVector(0, 1);
+                convertedDirection = new MapVector(1, 0);
             }
             else if (d.HasFlag(Direction.S))
             {
-                convertedDirection = new MapVector(-1, 0);
+                convertedDirection = new MapVector(0, 1);
             }
             else if (d.HasFlag(Direction.W))
             {
-                convertedDirection = new MapVector(0, -1);
+                convertedDirection = new MapVector(-1, 0);
             }
             else
             {
