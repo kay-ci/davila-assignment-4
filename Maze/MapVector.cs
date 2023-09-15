@@ -56,7 +56,30 @@ namespace Maze
             return new MapVector(newX, newY);
         }
 
-        public static implicit operator MapVector(Direction d) { }
+        public static implicit operator MapVector(Direction d) {
+            MapVector convertedDirection;
+            if (d.HasFlag(Direction.N))
+            {
+                convertedDirection = new MapVector(1, 0);
+            }
+            else if(d.HasFlag(Direction.E))
+            {
+                convertedDirection = new MapVector(0, 1);
+            }
+            else if (d.HasFlag(Direction.S))
+            {
+                convertedDirection = new MapVector(-1, 0);
+            }
+            else if (d.HasFlag(Direction.W))
+            {
+                convertedDirection = new MapVector(0, -1);
+            }
+            else
+            {
+                convertedDirection = new MapVector(0, 0);
+            }
+            return convertedDirection;
+        }
         
     }
 }
