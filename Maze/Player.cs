@@ -60,41 +60,39 @@ namespace Maze
 
         public void TurnLeft()
         {
-            if (Facing == Direction.N)
+            switch (Facing)
             {
-                Facing = Direction.W;
-            }
-            else if (Facing  == Direction.W)
-            {
-                Facing = Direction.S;
-            }
-            else if (Facing == Direction.S)
-            {
-                Facing = Direction.E;
-            }
-            else if (Facing == Direction.E)
-            {
-                Facing = Direction.N;
+                case Direction.N:
+                    Facing = Direction.W; 
+                    break;
+                case Direction.W:
+                    Facing = Direction.S;
+                    break;
+                case Direction.S:
+                    Facing = Direction.E;
+                    break;
+                case Direction.E:
+                    Facing = Direction.N;
+                    break;
             }
         }
 
         public void TurnRight()
         {
-            if (Facing == Direction.N)
+            switch (Facing)
             {
-                Facing = Direction.E;
-            }
-            else if (Facing == Direction.E)
-            {
-                Facing = Direction.S;
-            }
-            else if (Facing == Direction.S)
-            {
-                Facing = Direction.W;
-            }
-            else if (Facing == Direction.W)
-            {
-                Facing = Direction.N;
+                case Direction.N:
+                    Facing = Direction.E;
+                    break;
+                case Direction.W:
+                    Facing = Direction.N;
+                    break;
+                case Direction.S:
+                    Facing = Direction.W;
+                    break;
+                case Direction.E:
+                    Facing = Direction.S;
+                    break;
             }
         }
         private bool IsValidMove(MapVector newPosition)
