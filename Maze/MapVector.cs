@@ -90,6 +90,16 @@ namespace Maze
             }
             return convertedDirection;
         }
-        
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+
+            MapVector other = (MapVector)obj;
+            return X == other.X && Y == other.Y;
+        }
+
     }
 }
