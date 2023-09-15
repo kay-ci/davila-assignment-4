@@ -28,7 +28,23 @@ namespace Maze
 
         public float GetRotation()
         {
-            throw new NotImplementedException();
+            float rotationRadians = 0.0f;
+            switch (Facing)
+            {
+                case Direction.N:
+                    rotationRadians = 0.0f;
+                    break;
+                case Direction.E:
+                    rotationRadians = (float)(Math.PI / 2);
+                    break;
+                case Direction.S:
+                    rotationRadians = (float)Math.PI;
+                    break;
+                case Direction.W:
+                    rotationRadians = (float)(3 * Math.PI / 2);
+                    break;
+            }
+            return rotationRadians;
         }
 
         public void MoveBackward()
