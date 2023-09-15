@@ -140,7 +140,7 @@ namespace Maze.Tests
 
             //Assert
             Assert.AreEqual(1, player.Position.X);
-            Assert.AreEqual(2, player.Position.Y);
+            Assert.AreEqual(1, player.Position.Y);
         }
 
         [TestMethod()]
@@ -170,6 +170,19 @@ namespace Maze.Tests
             Assert.AreEqual(Direction.E, turn3);
             Assert.AreEqual(Direction.N, turn4);
         }
+        [ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod()]
+        public void TurnLeftOnNoneTest()
+        {
+            //Arrange
+            int startX = 1;
+            int startY = 1;
+            Player player = new Player(startX, startY, mapGrid);
+            player.Facing = Direction.None;
+
+            player.TurnLeft();
+
+        }
 
         [TestMethod()]
         public void TurnRightTest()
@@ -197,6 +210,38 @@ namespace Maze.Tests
             Assert.AreEqual(Direction.S, turn2);
             Assert.AreEqual(Direction.W, turn3);
             Assert.AreEqual(Direction.N, turn4);
+        }
+        [ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod()]
+        public void TurnRightOnNoneTest()
+        {
+            //Arrange
+            int startX = 1;
+            int startY = 1;
+            Player player = new Player(startX, startY, mapGrid);
+            player.Facing = Direction.None;
+
+            player.TurnRight();
+
+        }
+
+        [TestMethod()]
+        public void IsValidTest()
+        {
+            //Arrange
+            int startX = 1;
+            int startY = 3;
+            Player player = new Player(startX, startY, mapGrid);
+
+            MapVector newPosition = new MapVector(-2, 30); //out of bounds
+            MapVector solidPosition = new MapVector(0, 0); //if solid
+            
+            bool inBounds = player.IsValidMove(newPosition);
+            bool onSolid = player.IsValidMove(solidPosition);
+
+            Assert.IsFalse(inBounds);
+            Assert.IsFalse(onSolid);
+
         }
     }
 }
