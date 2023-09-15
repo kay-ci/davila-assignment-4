@@ -63,6 +63,44 @@ namespace Maze
                 }
             }
 
+            //Create Player
+            Random random = new Random();
+            int posY;
+            int posX;
+            do{
+                posY = random.Next(1, Height - 1);
+                posX = random.Next(1, Width - 1);
+            } while (MapGrid[posY, posX] != Block.Empty);
+
+            Player = new Player(posX, posY);
+
+            //step forward & step backwards
+            Player.MoveForward();
+            Player.MoveBackward();
+
+            //Generating Goal
+            int goalY;
+            int goalX;
+
+            while (true)
+            {
+                goalX = random.Next(1, Width-1);
+                goalY = random.Next(1, Height -1);
+
+                if (MapGrid[goalY, goalY] != Block.Solid)
+                {
+                    Direction goalDir = _directionMaze[(goalY-1)%2,(goalX-1)%2];
+                    bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; //checks if flag a power of 2
+                    if(hasOneFlag) {
+                        double distance = (Goal - Player.Position).Magnitude();
+                        if (distance >= ((new MapVector(Width,Height)).Magnitude() % 2)) {
+                            break;
+                        }
+                    }
+                }
+            }
+            Goal = new MapVector(goalX, goalY);
+
             PrintMaze();
             Console.WriteLine();
         }
