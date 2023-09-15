@@ -34,10 +34,11 @@ namespace Maze.Tests
             MapVector vector = new MapVector(x, y);
 
             //Act
-            bool actualInBounds = vector.InsideBoundary(13, 9);
+            bool isInBound = vector.InsideBoundary(13, 9);
 
             //Assert
-            Assert.AreEqual(inBounds, actualInBounds);
+            Assert.AreEqual(inBounds, vector.IsValid);
+            Assert.AreEqual(inBounds, isInBound);
         }
 
         [TestMethod()]
