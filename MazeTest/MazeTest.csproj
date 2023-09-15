@@ -19,4 +19,10 @@
     <ProjectReference Include="..\Maze\Maze.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="MazeFromFile">
+      <HintPath>..\MazeFromFile.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

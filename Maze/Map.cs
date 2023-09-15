@@ -19,7 +19,7 @@ namespace Maze
 
         public IPlayer Player {get; set;}
         private readonly IMapProvider MapProvider;
-        private Direction [,] _directionMaze { get; set; }
+        public Direction [,] _directionMaze { get; set; }
 
         public Map(IMapProvider mapProvider)
         {

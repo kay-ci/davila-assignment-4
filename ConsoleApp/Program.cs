@@ -12,8 +12,8 @@ public class Program
             input = Console.ReadLine();
             try
             {
-                //GenerateMaze(input); 
-                GenerateMaze("C:\\assignement01\\map9x13.txt");
+                GenerateMaze(input); 
+                //GenerateMaze("C:\\assignement01\\map9x7.txt");
             }
             catch (Exception e)
             {   
