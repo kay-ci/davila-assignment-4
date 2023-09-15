@@ -81,12 +81,14 @@ namespace Maze
 
             while (true)
             {
-                goalX = random.Next(1, Width-1);
-                goalY = random.Next(1, Height -1);
+                goalX = random.Next(0, _directionMaze.GetLength(1));
+                goalY = random.Next(1, _directionMaze.GetLength(0));
+                Goal = new MapVector(ToGrid(goalX), ToGrid(goalY));
 
-                if (MapGrid[goalY, goalY] != Block.Solid)
+                if (MapGrid[ToGrid(goalY), ToGrid(goalX)] != Block.Solid)
                 {
-                    Direction goalDir = _directionMaze[(goalY-1)%2,(goalX-1)%2];
+                    Direction goalDir = _directionMaze[goalY,goalX];
+                    
                     bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; //checks if flag a power of 2
                     if(hasOneFlag) {
                         double distance = (Goal - Player.Position).Magnitude();
@@ -96,12 +98,14 @@ namespace Maze
                     }
                 }
             }
-            Goal = new MapVector(goalX, goalY);
 
             PrintMaze();
             Console.WriteLine();
         }
-
+        public int ToGrid(int x)
+        {
+            return x * 2 + 1;
+        }
         public void CreateMap(int width, int height)
         {
             throw new NotImplementedException();
