@@ -16,6 +16,14 @@ namespace Maze
 
         public int StartY { get; set; }
 
+        public Player(int x, int y)
+        {
+            StartX = x;
+            StartY = y;
+            Facing = Direction.N;
+            Position = new MapVector(x, y);
+        }
+
         public float GetRotation()
         {
             throw new NotImplementedException();
