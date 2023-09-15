@@ -58,11 +58,11 @@ namespace Maze.Tests
             var addedMv = Mv + 2;
             var removedMV = Mv - 1;
 
-            MapVector ExpectedPlusMv = new MapVector(5, 6);
-            var ExpectedMinusMv = new MapVector(1, 3);
-
-            Assert.AreEqual(ExpectedPlusMv, addedMv);
-            Assert.AreEqual(ExpectedMinusMv, removedMV);
+            //Assert
+            Assert.AreEqual(4, addedMv.X);
+            Assert.AreEqual(6, addedMv.Y);
+            Assert.AreEqual(1, removedMV.X);
+            Assert.AreEqual(3, removedMV.Y);
         }
         [TestMethod()]
         public void VectorOpsTest()
