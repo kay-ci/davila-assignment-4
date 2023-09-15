@@ -13,7 +13,7 @@ public class Program
             try
             {
                 //GenerateMaze(input); 
-                GenerateMaze("C:\\assignement01\\map5x5.txt");
+                GenerateMaze("C:\\assignement01\\map9x13.txt");
             }
             catch (Exception e)
             {   
@@ -25,8 +25,6 @@ public class Program
     public static void GenerateMaze(string filePath) {
         Map map = new Map(new MazeFromFile.MazeFromFile(filePath));
         map.CreateMap();
-        Console.WriteLine("Height in blocks: " +map.Height);
-        Console.WriteLine("Width in blocks: " + map.Width);
 
     }
 }

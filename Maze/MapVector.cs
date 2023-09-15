@@ -55,6 +55,8 @@ namespace Maze
             int newY = v1.Y * v2.Y;
             return new MapVector(newX, newY);
         }
+
+        public static implicit operator MapVector(Direction d) { }
         
     }
 }

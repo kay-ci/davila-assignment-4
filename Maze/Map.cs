@@ -35,49 +35,36 @@ namespace Maze
             MapGrid = new Block[Height, Width];
 
             //setting to solid block 
-            for (int y = 0; y < Width; y++) { 
-                for(int x = 0; x < Height; x++)
+            for (int y = 0; y < Height; y++) { 
+                for(int x = 0; x < Width; x++)
                 {
                     MapGrid[y, x] = Block.Solid;
-                    Console.Write(MapGrid[x,y]+ " ");
                 }
                 Console.WriteLine("\n");
             }
-
-            for (int y = 1;y < Height; y++)
-            {
-                for (int x = 1;x < Width; x++)
+            for (int y = 0; y < _directionMaze.GetLength(0); y++) {
+                for (int x = 0; x < _directionMaze.GetLength(1); x++)
                 {
-                    MapGrid[y, x] = Block.Empty;
+                    int mapGridX = x * 2 + 1;
+                    int mapGridY = y * 2 + 1;
 
-                    //index out of bounds here
-                    Direction currentLocation = _directionMaze[x-1,y-1];
+                    MapGrid[mapGridY,mapGridX] = Block.Empty;
 
-                    var isEst = (currentLocation & Direction.E) > 0;
-                    var isSouth = (currentLocation & Direction.S) > 0;
+                    Direction currentLocation = _directionMaze[y, x];
 
-                    if (isEst)
+                    if ((currentLocation & Direction.E) > 0)
                     {
-                        MapGrid[y+1, x] = Block.Empty;
+                        MapGrid[mapGridY, mapGridX+1] = Block.Empty;
                     }
-                    if (isSouth)
+                    if ((currentLocation & Direction.S) > 0)
                     {
-                        MapGrid[y, x+1] = Block.Empty;
+                        MapGrid[mapGridY + 1, mapGridX] = Block.Empty;
                     }
-                    
                 }
-                
             }
 
-            for (int x=0; x < Height; x++) { 
-                for (int y = 0; y < Height; y++)
-                {
-                    Console.Write(MapGrid[x, y]);
-                }
-                Console.WriteLine("\n");
-            }
-
-            //how do we determine current location?
+            PrintMaze();
+            Console.WriteLine();
         }
 
         public void CreateMap(int width, int height)
@@ -88,6 +75,25 @@ namespace Maze
         public void SaveDirectionMap(string path)
         {
             throw new NotImplementedException();
+        }
+
+        public void PrintMaze()
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    if (MapGrid[y, x] == Block.Empty)
+                    {
+                        Console.Write("  ");
+                    }
+                    else
+                    {
+                        Console.Write("X ");
+                    }
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
