@@ -48,17 +48,38 @@ namespace Maze.Tests
 
             Assert.AreEqual(4.47, magnitude);
         }
-        public void OperationTest()
+        [TestMethod()]
+        public void ConstantOperationTest()
         {
-            //adding constant plus vectorMap
+            //Arrange
             MapVector Mv = new MapVector(2, 4);
+
+            //Act
             var addedMv = Mv + 2;
-            MapVector ExpectedMv = new MapVector(4, 6);
+            var removedMV = Mv - 1;
 
-            Assert.AreEqual(ExpectedMv, addedMv);
+            MapVector ExpectedPlusMv = new MapVector(5, 6);
+            var ExpectedMinusMv = new MapVector(1, 3);
 
-            //adding 2 VectorMaps 
-            MapVector vectors = Mv + ExpectedMv;
+            Assert.AreEqual(ExpectedPlusMv, addedMv);
+            Assert.AreEqual(ExpectedMinusMv, removedMV);
+        }
+        [TestMethod()]
+        public void VectorOpsTest()
+        {
+            var v1 = new MapVector(2, 4);
+            var v2 = new MapVector(1, 3);
+
+            var result1 = v1 + v2;
+            var result2 = v1 - v2;
+            var result3 = v1 * v2;
+
+            Assert.AreEqual(3, result1.X);
+            Assert.AreEqual(7, result1.Y);
+            Assert.AreEqual(1, result2.X);
+            Assert.AreEqual(1, result2.Y);
+            Assert.AreEqual(2, result3.X);
+            Assert.AreEqual(12, result3.Y);
         }
     }
 }
