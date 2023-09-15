@@ -82,5 +82,21 @@ namespace Maze.Tests
             Assert.AreEqual(2, result3.X);
             Assert.AreEqual(12, result3.Y);
         }
+        [TestMethod()]
+        public void EqualsTest()
+        {
+            //Arrange
+            MapVector mv1 = new MapVector(2, 4);
+            MapVector mv2 = new MapVector(2, 4);
+            MapVector mv3 = null;
+
+            //Act
+            bool isEqual = mv1.Equals(mv2);
+            bool notEqual = mv2.Equals(mv3);
+
+            //Assert
+            Assert.IsTrue(isEqual);
+            Assert.IsFalse(notEqual);
+        }
     }
 }

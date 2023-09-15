@@ -43,6 +43,8 @@ namespace Maze
                 case Direction.W:
                     rotationRadians = (float)(3 * Math.PI / 2);
                     break;
+                case Direction.None:
+                    throw new InvalidOperationException();
             }
             return rotationRadians;
         }
@@ -90,6 +92,8 @@ namespace Maze
                 case Direction.E:
                     Facing = Direction.N;
                     break;
+                case Direction.None:
+                    throw new InvalidOperationException();
             }
         }
 
@@ -109,9 +113,11 @@ namespace Maze
                 case Direction.E:
                     Facing = Direction.S;
                     break;
+                case Direction.None:
+                    throw new InvalidOperationException();
             }
         }
-        private bool IsValidMove(MapVector newPosition)
+        public bool IsValidMove(MapVector newPosition)
         {
             if(!newPosition.InsideBoundary(MapGrid.GetLength(1), MapGrid.GetLength(0)))
             {
