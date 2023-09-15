@@ -67,16 +67,13 @@ namespace Maze
             Random random = new Random();
             int posY;
             int posX;
-            do{
+            do
+            {
                 posY = random.Next(1, Height - 1);
                 posX = random.Next(1, Width - 1);
             } while (MapGrid[posY, posX] != Block.Empty);
 
-            Player = new Player(posX, posY);
-
-            //step forward & step backwards
-            Player.MoveForward();
-            Player.MoveBackward();
+            Player = new Player(posX, posY, MapGrid);
 
             //Generating Goal
             int goalY;

@@ -15,13 +15,15 @@ namespace Maze
         public int StartX { get; set; }
 
         public int StartY { get; set; }
+        public Block[,] MapGrid { get; private set; }
 
-        public Player(int x, int y)
+        public Player(int x, int y, Block[,] mapGrid)
         {
             StartX = x;
             StartY = y;
             Facing = Direction.N;
             Position = new MapVector(x, y);
+            MapGrid = mapGrid;
         }
 
         public float GetRotation()
@@ -31,22 +33,81 @@ namespace Maze
 
         public void MoveBackward()
         {
-            throw new NotImplementedException();
+            MapVector newPosition = Position - (MapVector)Facing;
+            if (IsValidMove(newPosition))
+            {
+                Position = newPosition;
+            } 
+            else
+            {
+                Position += 0;
+            }
         }
 
         public void MoveForward()
         {
-            throw new NotImplementedException();
+            MapVector newPosition = Position + (MapVector)Facing;
+            if (IsValidMove(newPosition)) {
+                Position = newPosition;
+            }
+            else
+            {
+                Position += 0;
+            }
+              
+            
         }
 
         public void TurnLeft()
         {
-            throw new NotImplementedException();
+            if (Facing == Direction.N)
+            {
+                Facing = Direction.W;
+            }
+            else if (Facing  == Direction.W)
+            {
+                Facing = Direction.S;
+            }
+            else if (Facing == Direction.S)
+            {
+                Facing = Direction.E;
+            }
+            else if (Facing == Direction.E)
+            {
+                Facing = Direction.N;
+            }
         }
 
         public void TurnRight()
         {
-            throw new NotImplementedException();
+            if (Facing == Direction.N)
+            {
+                Facing = Direction.E;
+            }
+            else if (Facing == Direction.E)
+            {
+                Facing = Direction.S;
+            }
+            else if (Facing == Direction.S)
+            {
+                Facing = Direction.W;
+            }
+            else if (Facing == Direction.W)
+            {
+                Facing = Direction.N;
+            }
+        }
+        private bool IsValidMove(MapVector newPosition)
+        {
+            if(!newPosition.InsideBoundary(MapGrid.GetLength(1), MapGrid.GetLength(0)))
+            {
+                return false;
+            }
+            if (MapGrid[newPosition.Y, newPosition.X] == Block.Solid)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
