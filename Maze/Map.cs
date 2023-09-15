@@ -8,6 +8,7 @@ namespace Maze
 {
     public class Map : IMap
     {
+        private Random _random { get; set; }
         public MapVector Goal { get; set; }
         public int Width { get; set; }
 
@@ -25,6 +26,7 @@ namespace Maze
         {
             MapProvider = mapProvider;
             _directionMaze = MapProvider.CreateMap();
+            _random = new();
         }
 
         public void CreateMap()
@@ -34,7 +36,7 @@ namespace Maze
 
             MapGrid = new Block[Height, Width];
 
-            //setting to solid block 
+            //Fill solid blocks
             for (int y = 0; y < Height; y++) { 
                 for(int x = 0; x < Width; x++)
                 {
@@ -42,65 +44,81 @@ namespace Maze
                 }
                 Console.WriteLine("\n");
             }
-            for (int y = 0; y < _directionMaze.GetLength(0); y++) {
-                for (int x = 0; x < _directionMaze.GetLength(1); x++)
-                {
-                    int mapGridX = x * 2 + 1;
-                    int mapGridY = y * 2 + 1;
 
-                    MapGrid[mapGridY,mapGridX] = Block.Empty;
-
-                    Direction currentLocation = _directionMaze[y, x];
-
-                    if ((currentLocation & Direction.E) > 0)
-                    {
-                        MapGrid[mapGridY, mapGridX+1] = Block.Empty;
-                    }
-                    if ((currentLocation & Direction.S) > 0)
-                    {
-                        MapGrid[mapGridY + 1, mapGridX] = Block.Empty;
-                    }
-                }
-            }
+            //Fill empty blocks
+            GenerateMaze();
 
             //Create Player
-            Random random = new Random();
-            int posY;
-            int posX;
-            do
-            {
-                posY = random.Next(1, Height - 1);
-                posX = random.Next(1, Width - 1);
-            } while (MapGrid[posY, posX] != Block.Empty);
+            Player = CreatePlayer();
 
-            Player = new Player(posX, posY, MapGrid);
-
-            //Generating Goal
+            //Create Goal
             int goalY;
             int goalX;
 
             while (true)
             {
-                goalX = random.Next(0, _directionMaze.GetLength(1));
-                goalY = random.Next(1, _directionMaze.GetLength(0));
+                goalX = _random.Next(0, _directionMaze.GetLength(1));
+                goalY = _random.Next(1, _directionMaze.GetLength(0));
                 Goal = new MapVector(ToGrid(goalX), ToGrid(goalY));
-
-                if (MapGrid[ToGrid(goalY), ToGrid(goalX)] != Block.Solid)
+                if(IsValidGoal(goalY, goalX)) {
+                    break;
+                }
+            }
+            PrintMaze();
+            Console.WriteLine();
+        }
+        private void GenerateMaze()
+        {
+            for (int y = 0; y < _directionMaze.GetLength(0); y++)
+            {
+                for (int x = 0; x < _directionMaze.GetLength(1); x++)
                 {
-                    Direction goalDir = _directionMaze[goalY,goalX];
-                    
-                    bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; //checks if flag a power of 2
-                    if(hasOneFlag) {
-                        double distance = (Goal - Player.Position).Magnitude();
-                        if (distance >= ((new MapVector(Width,Height)).Magnitude() % 2)) {
-                            break;
-                        }
+                    int mapGridX = x * 2 + 1;
+                    int mapGridY = y * 2 + 1;
+
+                    MapGrid[mapGridY, mapGridX] = Block.Empty;
+
+                    Direction currentLocation = _directionMaze[y, x];
+
+                    if (currentLocation.HasFlag(Direction.E))
+                    {
+                        MapGrid[mapGridY, mapGridX + 1] = Block.Empty;
+                    }
+                    if (currentLocation.HasFlag(Direction.S))
+                    {
+                        MapGrid[mapGridY + 1, mapGridX] = Block.Empty;
                     }
                 }
             }
+        }
+        private Player CreatePlayer()
+        {
+            int posY;
+            int posX;
+            do
+            {
+                posY = _random.Next(1, Height - 1);
+                posX = _random.Next(1, Width - 1);
+            } while (MapGrid[posY, posX] != Block.Empty);
 
-            PrintMaze();
-            Console.WriteLine();
+            return new Player(posX, posY, MapGrid);
+        }
+        private bool IsValidGoal(int goalY, int goalX) {
+            if (MapGrid[ToGrid(goalY), ToGrid(goalX)] != Block.Solid)
+            {
+                Direction goalDir = _directionMaze[goalY, goalX];
+
+                bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; //checks if flag a power of 2
+                if (hasOneFlag)
+                {
+                    double distance = (Goal - Player.Position).Magnitude();
+                    if (distance >= ((new MapVector(Width, Height)).Magnitude() % 2))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         public int ToGrid(int x)
         {
