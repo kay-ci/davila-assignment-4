@@ -19,18 +19,18 @@ namespace Maze
         public Block[,] MapGrid {get; set;}
 
         public IPlayer Player {get; set;}
-        private readonly IMapProvider MapProvider;
+        private readonly IMapProvider _mapProvider;
         public Direction [,] _directionMaze { get; set; }
 
         public Map(IMapProvider mapProvider)
         {
-            MapProvider = mapProvider;
-            _directionMaze = MapProvider.CreateMap();
+            _mapProvider = mapProvider;  
             _random = new();
         }
 
         public void CreateMap()
         {
+            _directionMaze = _mapProvider.CreateMap();
             Height = _directionMaze.GetLength(0)*2+1;
             Width = _directionMaze.GetLength(1)*2+1;
 
@@ -42,10 +42,9 @@ namespace Maze
                 {
                     MapGrid[y, x] = Block.Solid;
                 }
-                Console.WriteLine("\n");
             }
 
-            //Fill empty blocks
+            //Fill path blocks
             GenerateMaze();
 
             //Create Player
@@ -64,8 +63,6 @@ namespace Maze
                     break;
                 }
             }
-            PrintMaze();
-            Console.WriteLine();
         }
         private void GenerateMaze()
         {
@@ -95,11 +92,10 @@ namespace Maze
         {
             int posY;
             int posX;
-            do
-            {
+            do{
                 posY = _random.Next(1, Height - 1);
                 posX = _random.Next(1, Width - 1);
-            } while (MapGrid[posY, posX] != Block.Empty);
+            }while (MapGrid[posY, posX] != Block.Empty);
 
             return new Player(posX, posY, MapGrid);
         }
@@ -108,7 +104,8 @@ namespace Maze
             {
                 Direction goalDir = _directionMaze[goalY, goalX];
 
-                bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; //checks if flag a power of 2
+                // If It is a power of two, then it has only one direction
+                bool hasOneFlag = (goalDir & (goalDir - 1)) == 0; 
                 if (hasOneFlag)
                 {
                     double distance = (Goal - Player.Position).Magnitude();
@@ -120,7 +117,7 @@ namespace Maze
             }
             return false;
         }
-        public int ToGrid(int x)
+        private int ToGrid(int x)
         {
             return x * 2 + 1;
         }
@@ -132,39 +129,6 @@ namespace Maze
         public void SaveDirectionMap(string path)
         {
             throw new NotImplementedException();
-        }
-
-        public void PrintMaze()
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    if (MapGrid[y, x] == Block.Empty)
-                    {
-                        
-                        if (y == Goal.Y && x == Goal.X)
-                        {
-                            Console.Write("G ");
-                        }
-                        else if (y == Player.Position.Y && x == Player.Position.X)
-                        {
-                            Console.Write("P ");
-                        }
-                        else
-                        {
-                            Console.Write("  ");
-                        }
-                    }
-                    
-                    
-                    else
-                    {
-                        Console.Write("* ");
-                    }
-                }
-                Console.WriteLine();
-            }
         }
     }
 }
