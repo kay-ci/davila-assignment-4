@@ -8,14 +8,14 @@ namespace Maze
 {
     public class Player : IPlayer
     {
-        public Direction Facing { get; set; }
+        public Direction Facing { get; private set; }
 
-        public MapVector Position { get; set; }
+        public MapVector Position { get; private set; }
 
-        public int StartX { get; set; }
+        public int StartX { get; private set; }
 
-        public int StartY { get; set; }
-        public Block[,] MapGrid { get; private set; }
+        public int StartY { get; private set; }
+        private Block[,] _mapGrid { get; }
 
         public Player(int x, int y, Block[,] mapGrid)
         {
@@ -23,7 +23,7 @@ namespace Maze
             StartY = y;
             Facing = Direction.N;
             Position = new MapVector(x, y);
-            MapGrid = mapGrid;
+            _mapGrid = mapGrid;
         }
 
         public float GetRotation()
@@ -56,10 +56,6 @@ namespace Maze
             {
                 Position = newPosition;
             } 
-            else
-            {
-                Position += 0;
-            }
         }
 
         public void MoveForward()
@@ -68,12 +64,6 @@ namespace Maze
             if (IsValidMove(newPosition)) {
                 Position = newPosition;
             }
-            else
-            {
-                Position += 0;
-            }
-              
-            
         }
 
         public void TurnLeft()
@@ -119,11 +109,11 @@ namespace Maze
         }
         public bool IsValidMove(MapVector newPosition)
         {
-            if(!newPosition.InsideBoundary(MapGrid.GetLength(1), MapGrid.GetLength(0)))
+            if(!newPosition.InsideBoundary(_mapGrid.GetLength(1), _mapGrid.GetLength(0)))
             {
                 return false;
             }
-            if (MapGrid[newPosition.Y, newPosition.X] == Block.Solid)
+            if (_mapGrid[newPosition.Y, newPosition.X] == Block.Solid)
             {
                 return false;
             }
