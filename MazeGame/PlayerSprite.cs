@@ -91,7 +91,6 @@ namespace MazeGame
                 _spriteBatch.Draw(_pathTexture, _previousPosition, new Rectangle(0, 0, Pixels, Pixels), Color.White);
                 _spriteBatch.End();
             }
-            
             base.Draw(gameTime);
         }
 
