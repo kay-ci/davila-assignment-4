@@ -77,18 +77,17 @@ namespace MazeGame
             if (_previousPosition.X != _map.Player.Position.X  && _previousPosition.Y != _map.Player.Position.Y)
             {
                 _spriteBatch.Begin();
+                _spriteBatch.Draw(_pathTexture, _previousPosition, new Rectangle(0, 0, Pixels, Pixels), Color.White);
                 _spriteBatch.Draw(
                     _playerTexture, 
-                    new Vector2(_map.Player.Position.X * Pixels, _map.Player.Position.Y * Pixels),
-                    new Rectangle(0, 0, Pixels, Pixels),
+                    new Vector2(_map.Player.Position.X * Pixels + (Pixels / 2), _map.Player.Position.Y * Pixels + (Pixels / 2)),
+                    new Rectangle(0,0,Pixels,Pixels),
                     Color.White, 
                     _map.Player.GetRotation(),
                     new Vector2(_playerTexture.Width / 2, _playerTexture.Height / 2), 
                     1,
                     SpriteEffects.None,
                     0);
-
-                _spriteBatch.Draw(_pathTexture, _previousPosition, new Rectangle(0, 0, Pixels, Pixels), Color.White);
                 _spriteBatch.End();
             }
             base.Draw(gameTime);

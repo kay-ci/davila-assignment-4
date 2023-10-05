@@ -30,7 +30,7 @@ public class MazeGame : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        string filePath = "C:\\Users\\kayci\\School\\Programming_V\\davila-assignement-2\\map9x7.txt";
+        string filePath = "C:\\davila-assignement-2\\map9x7.txt";
         _map = new Map(new MazeFromFile.MazeFromFile(filePath));
         _map.CreateMap();
         _player = new PlayerSprite(this, _map);
