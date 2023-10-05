@@ -7,7 +7,7 @@ namespace MazeGame
     public class InputManager
     { 
         private static InputManager _instance = null;
-        private Dictionary<Keys, List<Action>> _keysHandler;
+        private readonly Dictionary<Keys, List<Action>> _keysHandler;
         private KeyboardState _previousState;
         private InputManager(){
             _keysHandler = new Dictionary<Keys, List<Action>>();

@@ -14,8 +14,8 @@ namespace MazeGame
     public class PlayerSprite: DrawableGameComponent
     {
         public const int Pixels = 32;
-        private Map _map;
-        private Game _game;
+        private readonly Map _map;
+        private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Texture2D _playerTexture;
         private Texture2D _pathTexture;
