@@ -2,21 +2,22 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Runtime.CompilerServices;
 
 namespace MazeGame;
 
 public class MazeGame : Game
 {
     private GraphicsDeviceManager _graphics;
-    private Map _map;
+    public Map _map;
     private SpriteBatch _spriteBatch;
     private Texture2D _pathTexture;
     private Texture2D _bunnyTexture;
     private Texture2D _goalTexture;
     private Texture2D _solidTexture;
-    private Vector2 _previousPosition;
-    private Vector2 _position;
+    
     private bool _isMazeGenerated;
+    private PlayerSprite _player;
 
     public MazeGame()
     {
@@ -33,7 +34,8 @@ public class MazeGame : Game
         string filePath = "C:\\Users\\kayci\\School\\Programming_V\\davila-assignement-2\\map9x13.txt";
         _map = new Map(new MazeFromFile.MazeFromFile(filePath));
         _map.CreateMap();
-        _position = new Vector2();
+        _player = new PlayerSprite(this, _map);
+        this.Components.Add( _player );
         base.Initialize();
     }
 
@@ -51,11 +53,10 @@ public class MazeGame : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
         // TODO: Add your update logic here
 
         base.Update(gameTime);
-        _isMazeGenerated = true;
+        _isMazeGenerated = false;
     }
 
     protected override void Draw(GameTime gameTime)
@@ -82,9 +83,10 @@ public class MazeGame : Game
                     {
                         _spriteBatch.Draw(_pathTexture, new Vector2(x * pixels, y * pixels), new Rectangle(0, 0, pixels, pixels), Color.White);
                     }
+        
                 }
             }
-            
+            _spriteBatch.Draw(_goalTexture, new Vector2(_map.Goal.X * pixels, _map.Goal.Y * pixels), new Rectangle(0, 0, pixels, pixels), Color.White);
         }
         _spriteBatch.End(); 
         base.Draw(gameTime);
