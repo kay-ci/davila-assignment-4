@@ -12,7 +12,6 @@ public class MazeGame : Game
     public Map _map;
     private SpriteBatch _spriteBatch;
     private Texture2D _pathTexture;
-    private Texture2D _bunnyTexture;
     private Texture2D _goalTexture;
     private Texture2D _solidTexture;
     
@@ -31,7 +30,7 @@ public class MazeGame : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        string filePath = "C:\\Users\\kayci\\School\\Programming_V\\davila-assignement-2\\map9x13.txt";
+        string filePath = "C:\\Users\\kayci\\School\\Programming_V\\davila-assignement-2\\map9x7.txt";
         _map = new Map(new MazeFromFile.MazeFromFile(filePath));
         _map.CreateMap();
         _player = new PlayerSprite(this, _map);
@@ -42,7 +41,6 @@ public class MazeGame : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _bunnyTexture = Content.Load<Texture2D>("bunny");
         _goalTexture = Content.Load<Texture2D>("goal");
         _pathTexture = Content.Load<Texture2D>("path");
         _solidTexture = Content.Load<Texture2D>("solid");
@@ -56,17 +54,16 @@ public class MazeGame : Game
         // TODO: Add your update logic here
 
         base.Update(gameTime);
-        _isMazeGenerated = false;
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
         int pixels = 32;
         _spriteBatch.Begin();
         // TODO: Add your drawing code here
         if(!_isMazeGenerated)
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             _graphics.PreferredBackBufferHeight = _map.Height * pixels;
             _graphics.PreferredBackBufferWidth = _map.Width * pixels;
             _graphics.ApplyChanges();
@@ -88,6 +85,7 @@ public class MazeGame : Game
             }
             _spriteBatch.Draw(_goalTexture, new Vector2(_map.Goal.X * pixels, _map.Goal.Y * pixels), new Rectangle(0, 0, pixels, pixels), Color.White);
         }
+        _isMazeGenerated = true;
         _spriteBatch.End(); 
         base.Draw(gameTime);
     }
