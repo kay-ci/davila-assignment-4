@@ -20,7 +20,8 @@ namespace MazeGame
         private Texture2D _playerTexture;
         private Texture2D _pathTexture;
         private Vector2 _previousPosition;
-        private KeyboardState _previousState;
+        private InputManager _inputManager;
+        
         public PlayerSprite(Game game, Map map) : base(game)
         {
             _game = game;
@@ -29,6 +30,22 @@ namespace MazeGame
         public override void Initialize()
         {
             _previousPosition = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
+            _inputManager = InputManager.Instance;
+            _inputManager.AddKeyHandler(Keys.Right, () => { _map.Player.TurnRight(); });
+
+            _inputManager.AddKeyHandler(Keys.Left, () => { _map.Player.TurnLeft(); });
+
+            _inputManager.AddKeyHandler(Keys.Down, () => {
+                _previousPosition.X = _map.Player.Position.X * Pixels;
+                _previousPosition.Y = _map.Player.Position.Y * Pixels;
+                _map.Player.MoveForward();
+            });
+
+            _inputManager.AddKeyHandler(Keys.Up, () => {
+                _previousPosition.X = _map.Player.Position.X * Pixels;
+                _previousPosition.Y = _map.Player.Position.Y * Pixels;
+                _map.Player.MoveBackward();
+            });
             base.Initialize();
         }
 
@@ -42,33 +59,11 @@ namespace MazeGame
 
         public override void Update(GameTime gameTime)
         {
-            var state = Keyboard.GetState();
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) & !_previousState.IsKeyDown(Keys.Right))
-            {
-                _map.Player.TurnRight();
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) & !_previousState.IsKeyDown(Keys.Left))
-            {
-                _map.Player.TurnLeft();
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down) & !_previousState.IsKeyDown(Keys.Down))
-            {
-                _previousPosition.X = _map.Player.Position.X * Pixels;
-                _previousPosition.Y = _map.Player.Position.Y * Pixels;
-                _map.Player.MoveForward();
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up) & !_previousState.IsKeyDown(Keys.Up))
-            {
-                _previousPosition.X = _map.Player.Position.X * Pixels;
-                _previousPosition.Y = _map.Player.Position.Y * Pixels;
-                _map.Player.MoveBackward();
-            }
+            _inputManager.Update();
             if (_map.Player.Position.Equals(_map.Goal))
             {
                 _game.Exit();
             }
-
-            _previousState = state;
             base.Update(gameTime);
         }
 

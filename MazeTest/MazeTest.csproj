@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -18,13 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MazeGame\MazeGame.csproj" />
     <ProjectReference Include="..\Maze\Maze.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="MazeFromFile">
-      <HintPath>..\MazeFromFile.dll</HintPath>
+      <HintPath>..\MazeFromFile.dll</HintPath> 
     </Reference>
   </ItemGroup>
 

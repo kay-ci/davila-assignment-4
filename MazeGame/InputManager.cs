@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace MazeGame
 {
@@ -12,6 +8,7 @@ namespace MazeGame
     { 
         private static InputManager _instance = null;
         private Dictionary<Keys, List<Action>> _keysHandler;
+        private KeyboardState _previousState;
         private InputManager(){
             _keysHandler = new Dictionary<Keys, List<Action>>();
         }
@@ -28,13 +25,26 @@ namespace MazeGame
         
         public void AddKeyHandler(Keys key, Action action)
         {
-            List<Action> actions = new List<Action>();
-            actions.Add(action);
-            _keysHandler.Add(key, actions);
+            if(!_keysHandler.ContainsKey(key))
+            {
+                _keysHandler[key] = new List<Action>();
+            }
+            _keysHandler[key].Add(action);
         }
         public void Update()
         {
-
+            KeyboardState state = Keyboard.GetState();
+            foreach (var keyPair in _keysHandler)
+            {
+                if (state.IsKeyDown(keyPair.Key) & !_previousState.IsKeyDown(keyPair.Key))
+                {
+                    foreach (Action action in keyPair.Value)
+                    {
+                        action.Invoke();
+                    }
+                }
+            }
+            _previousState = state;
         }
     }
 }
