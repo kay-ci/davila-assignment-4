@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MazeFromFile">
-      <HintPath>..\..\davilaassignement2\MazeFromFile.dll</HintPath>
+      <HintPath>..\..\davila-assignement-2\MazeFromFile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

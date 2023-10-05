@@ -3,7 +3,7 @@ using System.Windows.Forms;
 public class Program{
     public static void Main(string[] args)
     {
-        using var game = new MazeGame.Game1();
+        using var game = new MazeGame.MazeGame();
         game.Run();
 
         //var fileContent = string.Empty;
