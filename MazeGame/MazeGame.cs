@@ -52,7 +52,7 @@ public class MazeGame : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
            || Keyboard.GetState().IsKeyDown(Keys.Escape))
         {
-            _logger.Info($"User pressed Escape Key...Exiting Game at {DateTime.Now}");
+            _logger.Info($"User pressed Escape Key...Exiting Game");
             Exit();
         }
 
@@ -66,7 +66,6 @@ public class MazeGame : Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _graphics.PreferredBackBufferHeight = _map.Height * Pixels;
             _graphics.PreferredBackBufferWidth = _map.Width * Pixels;
-            _graphics.ApplyChanges(); // Maze fit Window size
 
             _spriteBatch.Begin();
             for (int y = 0; y < _map.Height; y++)

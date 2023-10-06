@@ -61,7 +61,7 @@ namespace MazeGame
             if (_map.Player.Position.Equals(_map.Goal))
             {
                 _game.Exit();
-                _logger.Info($"Player reached goal at {DateTime.Now}... exiting");
+                _logger.Info($"Player reached goal... exiting");
             }
             base.Update(gameTime);
         }
