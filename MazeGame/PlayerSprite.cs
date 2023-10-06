@@ -33,6 +33,8 @@ namespace MazeGame
         }
         public override void Initialize()
         {
+            _previousPosition.X = 1 * Pixels;
+            _previousPosition.Y = 1 * Pixels;
             _position = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
             _logger.Info($"Player starts at X: {_map.Player.StartX} Y: {_map.Player.StartY}");
             _inputManager = InputManager.Instance;
