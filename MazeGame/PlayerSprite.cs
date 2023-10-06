@@ -37,21 +37,13 @@ namespace MazeGame
             _position = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
             _logger.Info($"Player starts at X: {_map.Player.StartX} Y: {_map.Player.StartY}");
             _inputManager = InputManager.Instance;
-            _inputManager.AddKeyHandler(Keys.Right, () => { _map.Player.TurnRight(); });
+            _inputManager.AddKeyHandler(Keys.Right, () => { _map.Player.TurnRight(); _logger.Debug($"Player Turned Right"); });
 
-            _inputManager.AddKeyHandler(Keys.Left, () => { _map.Player.TurnLeft(); });
+            _inputManager.AddKeyHandler(Keys.Left, () => { _map.Player.TurnLeft(); _logger.Debug($"Player Turned Left");});
 
-            _inputManager.AddKeyHandler(Keys.Down, () => {
-                _previousPosition.X = _map.Player.Position.X * Pixels;
-                _previousPosition.Y = _map.Player.Position.Y * Pixels;
-                _map.Player.MoveForward();
-            });
+            _inputManager.AddKeyHandler(Keys.Down, () => { _map.Player.MoveForward();});
 
-            _inputManager.AddKeyHandler(Keys.Up, () => {
-                _previousPosition.X = _map.Player.Position.X * Pixels;
-                _previousPosition.Y = _map.Player.Position.Y * Pixels;
-                _map.Player.MoveBackward();
-            });
+            _inputManager.AddKeyHandler(Keys.Up, () => { _map.Player.MoveBackward(); });
             base.Initialize();
         }
 
@@ -83,9 +75,11 @@ namespace MazeGame
                 _previousRotation = rotation;
                 
                 _spriteBatch.Begin();
-                
-                _spriteBatch.Draw(_pathTexture, new Vector2(_previousPosition.X * Pixels, _previousPosition.Y * Pixels), Color.White);
-                
+                if (_previousPosition.X != 0)
+                {
+                    _spriteBatch.Draw(_pathTexture, new Vector2(_previousPosition.X * Pixels, _previousPosition.Y * Pixels), Color.White);
+
+                }
                 _spriteBatch.Draw(
                     _playerTexture, 
                     _position,
@@ -97,7 +91,7 @@ namespace MazeGame
                     SpriteEffects.None,
                     0);
                 _spriteBatch.End();
-                _logger.Info($"Player stepped on X: {_map.Player.Position.X} Y: {_map.Player.Position.Y}");
+                _logger.Debug($"Player on X: {_map.Player.Position.X} Y: {_map.Player.Position.Y}");
             }
             _previousPosition.X = _map.Player.Position.X;
             _previousPosition.Y = _map.Player.Position.Y;
