@@ -31,5 +31,5 @@ deployment:
     - zip -r MazeGame.zip publish_output/.
   artifacts:
     paths:
-      - MazeGame.zip
+      - MazeGame/MazeGame.zip
     expire_in: "2 weeks"
