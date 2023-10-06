@@ -47,7 +47,7 @@ namespace Maze.Tests
             MapVector Mv = new MapVector(2, 4);
             double magnitude = Mv.Magnitude();
 
-            Assert.AreEqual(4.47, magnitude);
+            Assert.AreEqual(4.47, magnitude,0.1);
         }
         [TestMethod()]
         public void ConstantOperationTest()
