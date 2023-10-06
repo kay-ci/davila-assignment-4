@@ -17,7 +17,7 @@ unit-test:
       junit:
         - ./**/*test-result.xml
 
-    expire_in: "1 weeks"
+    expire_in: "1 week"
 
 
 deployment:
@@ -28,8 +28,7 @@ deployment:
   script:
     - cd MazeGame
     - dotnet publish -c Release -o publish_output
-    - cd publish_output
-    - zip -r MazeGame.zip .
+    - zip -r MazeGame.zip publish_output/.
   artifacts:
     paths:
       - MazeGame.zip
