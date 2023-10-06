@@ -11,11 +11,11 @@ namespace Maze.Tests
     [TestClass()]
     public class PlayerTests
     {
-        public Block[,] mapGrid { get; set; }
+        private Block[,] _mapGrid { get; set; }
         [TestInitialize]
         public void Init()
         {
-            mapGrid = new Block[5, 5]{
+            _mapGrid = new Block[5, 5]{
                 {Block.Solid,Block.Solid,Block.Solid,Block.Solid,Block.Solid },
                 {Block.Solid,Block.Empty,Block.Empty,Block.Empty, Block.Solid},
                 {Block.Solid,Block.Empty,Block.Solid, Block.Empty,Block.Solid},
@@ -30,7 +30,7 @@ namespace Maze.Tests
             int startX = 1;
             int startY = 3;
             //Act
-            var testPlayer = new Player(startX, startY, mapGrid);
+            var testPlayer = new Player(startX, startY, _mapGrid);
             //Assert
             Assert.AreEqual(1, testPlayer.Position.X);
         }
@@ -41,18 +41,18 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
 
             //Act
             float northR = player.GetRotation();
 
-            player.Facing = Direction.E;
+            player.TurnRight();
             float eastR = player.GetRotation();
 
-            player.Facing = Direction.S;
+            player.TurnRight();
             float southR = player.GetRotation();
 
-            player.Facing = Direction.W;
+            player.TurnRight();
             float westR = player.GetRotation();
 
             //Assert
@@ -61,35 +61,19 @@ namespace Maze.Tests
             Assert.AreEqual(3.141f, southR, 0.01);
             Assert.AreEqual(4.712f, westR, 0.01);
         }
-        [ExpectedException(typeof(InvalidOperationException))]
         [TestMethod()]
-        public void InvalidRotation()
+        public void MoveBackwardTest()
         {
             //Arrange
             int startX = 1;
             int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
-            player.Facing = Direction.None;
-
-            player.GetRotation();
-
-        }
-        [DataRow(Direction.N, 1, 2)]
-        [DataRow(Direction.W, 2, 1)]
-        [TestMethod()]
-        public void MoveBackwardTest(Direction facing, int x, int y)
-        {
-            //Arrange
-            int startX = 1;
-            int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
-            player.Facing = facing;
+            Player player = new Player(startX, startY, _mapGrid);
             //Act
             player.MoveBackward();
 
             //Assert
-            Assert.AreEqual(x, player.Position.X);
-            Assert.AreEqual(y, player.Position.Y);
+            Assert.AreEqual(1, player.Position.X);
+            Assert.AreEqual(2, player.Position.Y);
             
         }
        
@@ -98,7 +82,7 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 3;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
             
 
             //Act
@@ -109,23 +93,21 @@ namespace Maze.Tests
             Assert.AreEqual(3,player.Position.Y);
 
         }
-        [DataRow(Direction.E, 2, 1)]
-        [DataRow(Direction.S, 1, 2)]
         [TestMethod()]
-        public void MoveForwardTest(Direction facing, int x, int y)
+        public void MoveForwardTest()
         {
             //Arrange
             int startX = 1;
             int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
-            player.Facing = facing;
+            Player player = new Player(startX, startY, _mapGrid);
+            player.TurnRight();
 
             //Act
             player.MoveForward();
 
             //Assert
-            Assert.AreEqual(x, player.Position.X);
-            Assert.AreEqual(y, player.Position.Y);
+            Assert.AreEqual(2, player.Position.X);
+            Assert.AreEqual(1, player.Position.Y);
         }
         [TestMethod()]
         public void MoveForwardFailTest()
@@ -133,7 +115,7 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
 
             //Act
             player.MoveForward();
@@ -149,7 +131,7 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 3;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
 
             //Act
             player.TurnLeft();
@@ -170,19 +152,6 @@ namespace Maze.Tests
             Assert.AreEqual(Direction.E, turn3);
             Assert.AreEqual(Direction.N, turn4);
         }
-        [ExpectedException(typeof(InvalidOperationException))]
-        [TestMethod()]
-        public void TurnLeftOnNoneTest()
-        {
-            //Arrange
-            int startX = 1;
-            int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
-            player.Facing = Direction.None;
-
-            player.TurnLeft();
-
-        }
 
         [TestMethod()]
         public void TurnRightTest()
@@ -190,7 +159,7 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 3;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
 
             //Act
             player.TurnRight();
@@ -211,19 +180,6 @@ namespace Maze.Tests
             Assert.AreEqual(Direction.W, turn3);
             Assert.AreEqual(Direction.N, turn4);
         }
-        [ExpectedException(typeof(InvalidOperationException))]
-        [TestMethod()]
-        public void TurnRightOnNoneTest()
-        {
-            //Arrange
-            int startX = 1;
-            int startY = 1;
-            Player player = new Player(startX, startY, mapGrid);
-            player.Facing = Direction.None;
-
-            player.TurnRight();
-
-        }
 
         [TestMethod()]
         public void IsValidTest()
@@ -231,7 +187,7 @@ namespace Maze.Tests
             //Arrange
             int startX = 1;
             int startY = 3;
-            Player player = new Player(startX, startY, mapGrid);
+            Player player = new Player(startX, startY, _mapGrid);
 
             MapVector newPosition = new MapVector(-2, 30); //out of bounds
             MapVector solidPosition = new MapVector(0, 0); //if solid

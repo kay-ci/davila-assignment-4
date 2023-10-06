@@ -8,11 +8,11 @@ namespace Maze
 {
     public class MapVector : IMapVector
     {
-        public bool IsValid { get; set; }
+        public bool IsValid { get; private set; }
 
-        public int X { get; set; }
+        public int X { get; private set; }
 
-        public int Y { get; set; }
+        public int Y { get; private set; }
         public MapVector(int x, int y)
         {
             this.X = x;
@@ -36,7 +36,7 @@ namespace Maze
         public double Magnitude()
         {
             double magnitude = Math.Sqrt(X * X + Y * Y);
-            return Math.Round(magnitude,2);
+            return magnitude;
         }
 
         public static implicit operator MapVector(int x)
@@ -67,19 +67,19 @@ namespace Maze
 
         public static implicit operator MapVector(Direction d) {
             MapVector convertedDirection;
-            if (d.HasFlag(Direction.N))
+            if (d == Direction.N)
             {
                 convertedDirection = new MapVector(0, -1);
             }
-            else if(d.HasFlag(Direction.E))
+            else if(d == Direction.E)
             {
                 convertedDirection = new MapVector(1, 0);
             }
-            else if (d.HasFlag(Direction.S))
+            else if (d == Direction.S)
             {
                 convertedDirection = new MapVector(0, 1);
             }
-            else if (d.HasFlag(Direction.W))
+            else if (d == Direction.W)
             {
                 convertedDirection = new MapVector(-1, 0);
             }

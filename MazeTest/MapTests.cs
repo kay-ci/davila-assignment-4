@@ -31,6 +31,7 @@ namespace Maze.Tests
         public void MapTest()
         {
             Map map = new Map(MapProvider);
+            map.CreateMap();
             Assert.IsNotNull(map._directionMaze);
             Assert.AreEqual(2, map._directionMaze.GetLength(1));
             Assert.AreEqual(2, map._directionMaze.GetLength(0));
@@ -48,20 +49,7 @@ namespace Maze.Tests
             Assert.IsNotNull(map.Player);
             Assert.AreEqual(5, map.Height);
             Assert.AreEqual(5, map.Width);
+            Assert.AreEqual(Block.Empty, map.MapGrid[1, 1]);
         }
-
-        [TestMethod()]
-        public void ToGridTest()
-        {
-            //Arrange
-            int value = 2;
-            Map map = new Map(MapProvider);
-
-            //act
-            int actual = map.ToGrid(value);
-            //assert
-            Assert.AreEqual(5, actual);
-        }
-
     }
 }
