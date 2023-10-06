@@ -1,9 +1,26 @@
+default:
+  image: mcr.microsoft.com/dotnet/sdk:6.0
 stages:
   - test
   - deploy
 
+unit-test:
+  stage: test
+  script:
+    - cd MazeTest
+    - 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+  artifacts:
+    when: always
+    paths:
+       - ./**/*test-result.xml
+    reports:
+      junit:
+        - ./**/*test-result.xml
+
+    expire_in: "1 weeks"
+
+
 deployment:
-  image: MCR.microsoft.com/dotnet/sdk:6.0
   stage: deploy
   before_script:
     - apt-get update
