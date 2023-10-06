@@ -1,36 +1,43 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
-public class Program{
+public class Program : Form{
+    [STAThread]
     public static void Main(string[] args)
     {
-        using var game = new MazeGame.MazeGame();
-        game.Run();
+        try
+        {
+            StartGame();
+        }
+        catch (Exception ex) { 
+            MessageBox.Show($"Error: {ex.Message}","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            StartGame();
+        }
+    }
 
-        //var fileContent = string.Empty;
-        //var filePath = string.Empty;
-        //using (OpenFileDialog openFileDialog = new OpenFileDialog())
-        //{
-        //    openFileDialog.InitialDirectory = "c:\\davila-assignement-2";
-        //    openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-        //    openFileDialog.FilterIndex = 2;
-        //    openFileDialog.RestoreDirectory = true;
+    private static void StartGame()
+    {
+        var filePath = string.Empty;
+        using (OpenFileDialog openFileDialog = new OpenFileDialog())
+        {
+            openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog.Title = "Browse Map File to Load";
+            openFileDialog.Filter = "txt files (*.txt)|*.txt";
+            openFileDialog.FilterIndex = 2;
+            openFileDialog.DefaultExt = "txt";
+            openFileDialog.RestoreDirectory = true;
 
-        //    if (openFileDialog.ShowDialog() == DialogResult.OK)
-        //    {
-        //        //Get the path of specified file
-        //        filePath = openFileDialog.FileName;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                filePath = openFileDialog.FileName;
 
-        //        //Read the contents of the file into a stream
-        //        var fileStream = openFileDialog.OpenFile();
-
-        //        using (StreamReader reader = new StreamReader(fileStream))
-        //        {
-        //            fileContent = reader.ReadToEnd();
-        //        }
-        //    }
-        //}
-
-        //MessageBox.Show(fileContent, "File Content at path: " + filePath, MessageBoxButtons.OK);
+                var game = new MazeGame.MazeGame(filePath);
+                game.Run();
+                
+                MessageBox.Show("Thank you for Playing!", "Bun Bun Maze", MessageBoxButtons.OK);
+            }
+        }
     }
 }
 

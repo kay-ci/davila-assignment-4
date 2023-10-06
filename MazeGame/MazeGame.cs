@@ -11,14 +11,16 @@ public class MazeGame : Game
     private readonly GraphicsDeviceManager _graphics;
     public const int Pixels = 32;
     private bool _isMazeGenerated;
+    private string _filePath;
     private SpriteBatch _spriteBatch;
     private Texture2D _pathTexture;
     private Texture2D _goalTexture;
     private Texture2D _solidTexture;
     private PlayerSprite _player;
     public Map _map;
-    public MazeGame()
+    public MazeGame(string filePath)
     {
+        _filePath = filePath;
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -26,8 +28,7 @@ public class MazeGame : Game
 
     protected override void Initialize()
     {
-        string filePath = "C:\\Users\\kayci\\School\\Programming_V\\davila-assignement-2\\map9x7.txt";
-        _map = new Map(new MazeFromFile.MazeFromFile(filePath));
+        _map = new Map(new MazeFromFile.MazeFromFile(_filePath));
         _map.CreateMap();
         _player = new PlayerSprite(this, _map);
         this.Components.Add( _player );
