@@ -40,7 +40,7 @@ namespace MazeGame
                 {
                     foreach (Action action in keyPair.Value)
                     {
-                        action.Invoke();
+                        action?.Invoke();
                     }
                 }
             }

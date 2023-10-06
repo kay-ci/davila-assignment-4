@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace MazeGame;
 
 public class MazeGame : Game
 {
+    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly GraphicsDeviceManager _graphics;
     public const int Pixels = 32;
     private bool _isMazeGenerated;
@@ -24,6 +26,7 @@ public class MazeGame : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        _logger.Info($"Map Loaded from: {_filePath}");
     }
 
     protected override void Initialize()
@@ -46,6 +49,13 @@ public class MazeGame : Game
 
     protected override void Update(GameTime gameTime)
     {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+           || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
+            _logger.Info($"User pressed Escape Key...Exiting Game at {DateTime.Now}");
+            Exit();
+        }
+
         base.Update(gameTime);
     }
 
@@ -76,6 +86,7 @@ public class MazeGame : Game
                 }
             }
             _spriteBatch.Draw(_goalTexture, new Vector2(_map.Goal.X * Pixels, _map.Goal.Y * Pixels), new Rectangle(0, 0, Pixels, Pixels), Color.White);
+            _logger.Info($"Goal located at X: {_map.Goal.X} Y: {_map.Goal.Y}");
             _spriteBatch.End();
         }
         _isMazeGenerated = true;

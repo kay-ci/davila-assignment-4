@@ -13,15 +13,19 @@ namespace MazeGame
 {
     public class PlayerSprite: DrawableGameComponent
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         public const int Pixels = 32;
+
         private readonly Map _map;
         private readonly Game _game;
         private SpriteBatch _spriteBatch;
         private Texture2D _playerTexture;
         private Texture2D _pathTexture;
-        private Vector2 _previousPosition;
         private InputManager _inputManager;
-        
+        private Vector2 _position;
+        private Vector2 _previousPosition;
+        private float _previousRotation;
+
         public PlayerSprite(Game game, Map map) : base(game)
         {
             _game = game;
@@ -29,7 +33,8 @@ namespace MazeGame
         }
         public override void Initialize()
         {
-            _previousPosition = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
+            _position = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
+            _logger.Info($"Player starts at X: {_map.Player.StartX} Y: {_map.Player.StartY}");
             _inputManager = InputManager.Instance;
             _inputManager.AddKeyHandler(Keys.Right, () => { _map.Player.TurnRight(); });
 
@@ -63,27 +68,32 @@ namespace MazeGame
             if (_map.Player.Position.Equals(_map.Goal))
             {
                 _game.Exit();
+                _logger.Info($"Player reached goal at {DateTime.Now}... exiting");
             }
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (_previousPosition.X != _map.Player.Position.X  && _previousPosition.Y != _map.Player.Position.Y)
+            float rotation = _map.Player.GetRotation();
+            _position = new Vector2(_map.Player.Position.X * Pixels + (Pixels / 2), _map.Player.Position.Y * Pixels + (Pixels / 2));
+            if (_previousPosition.X != _map.Player.Position.X * Pixels  || _previousPosition.Y != _map.Player.Position.Y * Pixels || _previousRotation != rotation)
             {
+                _previousRotation = rotation;
                 _spriteBatch.Begin();
                 _spriteBatch.Draw(_pathTexture, _previousPosition, new Rectangle(0, 0, Pixels, Pixels), Color.White);
                 _spriteBatch.Draw(
                     _playerTexture, 
-                    new Vector2(_map.Player.Position.X * Pixels + (Pixels / 2), _map.Player.Position.Y * Pixels + (Pixels / 2)),
+                    _position,
                     new Rectangle(0,0,Pixels,Pixels),
                     Color.White, 
-                    _map.Player.GetRotation(),
+                    rotation,
                     new Vector2(_playerTexture.Width / 2, _playerTexture.Height / 2), 
                     1,
                     SpriteEffects.None,
                     0);
                 _spriteBatch.End();
+                _logger.Info($"Player stepped on X: {_map.Player.Position.X} Y: {_map.Player.Position.Y}");
             }
             base.Draw(gameTime);
         }
