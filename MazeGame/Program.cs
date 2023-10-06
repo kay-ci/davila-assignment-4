@@ -10,7 +10,7 @@ public class Program : Form{
             StartGame();
         }
         catch (Exception ex) { 
-            MessageBox.Show($"Error: {ex.Message}","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Error, open a valid .txt file","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             StartGame();
         }
     }

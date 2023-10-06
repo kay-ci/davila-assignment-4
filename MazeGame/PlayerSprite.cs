@@ -33,8 +33,7 @@ namespace MazeGame
         }
         public override void Initialize()
         {
-            _previousPosition.X = 1 * Pixels;
-            _previousPosition.Y = 1 * Pixels;
+
             _position = new Vector2(_map.Player.StartX * Pixels, _map.Player.StartY * Pixels);
             _logger.Info($"Player starts at X: {_map.Player.StartX} Y: {_map.Player.StartY}");
             _inputManager = InputManager.Instance;
@@ -79,11 +78,14 @@ namespace MazeGame
         {
             float rotation = _map.Player.GetRotation();
             _position = new Vector2(_map.Player.Position.X * Pixels + (Pixels / 2), _map.Player.Position.Y * Pixels + (Pixels / 2));
-            if (_previousPosition.X != _map.Player.Position.X * Pixels  || _previousPosition.Y != _map.Player.Position.Y * Pixels || _previousRotation != rotation)
+            if (_previousPosition.X * Pixels != _map.Player.Position.X * Pixels  || _previousPosition.Y * Pixels != _map.Player.Position.Y * Pixels || _previousRotation != rotation)
             {
                 _previousRotation = rotation;
+                
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(_pathTexture, _previousPosition, new Rectangle(0, 0, Pixels, Pixels), Color.White);
+                
+                _spriteBatch.Draw(_pathTexture, new Vector2(_previousPosition.X * Pixels, _previousPosition.Y * Pixels), Color.White);
+                
                 _spriteBatch.Draw(
                     _playerTexture, 
                     _position,
@@ -97,6 +99,8 @@ namespace MazeGame
                 _spriteBatch.End();
                 _logger.Info($"Player stepped on X: {_map.Player.Position.X} Y: {_map.Player.Position.Y}");
             }
+            _previousPosition.X = _map.Player.Position.X;
+            _previousPosition.Y = _map.Player.Position.Y;
             base.Draw(gameTime);
         }
 
