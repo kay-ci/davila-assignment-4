@@ -66,7 +66,7 @@ public class MazeGame : Game
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _graphics.PreferredBackBufferHeight = _map.Height * Pixels;
             _graphics.PreferredBackBufferWidth = _map.Width * Pixels;
-
+            _graphics.ApplyChanges();
             _spriteBatch.Begin();
             for (int y = 0; y < _map.Height; y++)
             {
