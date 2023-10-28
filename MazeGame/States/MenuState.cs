@@ -7,34 +7,39 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MazeGame.Controls;
+using System.Windows.Forms;
+using Maze;
+using Button = MazeGame.Controls.Button;
 
 namespace MazeGame.States
 {
     public class MenuState : State
     {
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private List<Component> _components;
 
         public MenuState(MazeGameFinal game, GraphicsDevice graphicsDevice, ContentManager content)
           : base(game, graphicsDevice, content)
         {
-            var buttonTexture = _content.Load<Texture2D>("Controls/Button");
-            var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
+            var buttonTexture = _content.Load<Texture2D>("Controls/button");
+            var buttonFont = _content.Load<SpriteFont>("Fonts/font");
 
-            var newGameButton = new Button(buttonTexture, buttonFont)
+            var fromFileButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(300, 200),
-                Text = "New Game",
+                Text = "Load Maze From File",
             };
 
-            newGameButton.Click += NewGameButton_Click;
+            fromFileButton.Click += FromFileButton_Click;
 
-            var loadGameButton = new Button(buttonTexture, buttonFont)
+            var recursionButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(300, 250),
-                Text = "Load Game",
+                Text = "Load Maze by Recursion",
             };
 
-            loadGameButton.Click += LoadGameButton_Click;
+            recursionButton.Click += RecursionButton_Click;
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
@@ -45,11 +50,11 @@ namespace MazeGame.States
             quitGameButton.Click += QuitGameButton_Click;
 
             _components = new List<Component>()
-      {
-        newGameButton,
-        loadGameButton,
-        quitGameButton,
-      };
+            {
+                fromFileButton,
+                recursionButton,
+                quitGameButton,
+            };
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -62,14 +67,32 @@ namespace MazeGame.States
             spriteBatch.End();
         }
 
-        private void LoadGameButton_Click(object sender, EventArgs e)
+        private void FromFileButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Load Game");
+            
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Title = "Browse Map File to Load";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.DefaultExt = "txt";
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    var filePath = openFileDialog.FileName;
+                    IMapProvider mapProvider = new MazeFromFile.MazeFromFile(filePath);
+                    _game.ChangeState(new GameState(_game, _graphicsDevice, _content, mapProvider));
+                    _logger.Info($"Map Loaded from: {filePath}");
+                }
+            }
         }
 
-        private void NewGameButton_Click(object sender, EventArgs e)
+        private void RecursionButton_Click(object sender, EventArgs e)
         {
-            _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
+            //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -86,6 +109,8 @@ namespace MazeGame.States
         private void QuitGameButton_Click(object sender, EventArgs e)
         {
             _game.Exit();
+            MessageBox.Show("Thank you for Playing!", "Bun Bun Maze", MessageBoxButtons.OK);
         }
+
     }
 }

@@ -7,17 +7,23 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
+using Maze;
+using System.Drawing;
 
 namespace MazeGame
 {
     public class MazeGameFinal : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private PlayerSprite _player;
+        public Map _map;
         private State _currentState;
 
         private State _nextState;
+        private IMapProvider _mapProvider;
 
         public void ChangeState(State state)
         {
@@ -26,8 +32,9 @@ namespace MazeGame
 
         public MazeGameFinal()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            ;
         }
 
         /// <summary>
@@ -39,7 +46,6 @@ namespace MazeGame
         protected override void Initialize()
         {
             IsMouseVisible = true;
-
             base.Initialize();
         }
 
@@ -50,9 +56,10 @@ namespace MazeGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            _currentState = new MenuState(this, graphics.GraphicsDevice, Content);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            base.LoadContent();
         }
 
         /// <summary>
@@ -77,7 +84,7 @@ namespace MazeGame
 
                 _nextState = null;
             }
-
+            
             _currentState.Update(gameTime);
 
             _currentState.PostUpdate(gameTime);
@@ -91,11 +98,12 @@ namespace MazeGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _currentState.Draw(gameTime, spriteBatch);
-
+            _currentState.Draw(gameTime, _spriteBatch);
+            //_graphics.PreferredBackBufferHeight = map.Height * Pixels;
+            //_graphics.PreferredBackBufferWidth = map.Width * Pixels;
+            //_graphics.ApplyChanges();
             base.Draw(gameTime);
         }
+    
     }
 }

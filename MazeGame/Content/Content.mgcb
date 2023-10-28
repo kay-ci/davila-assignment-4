@@ -37,11 +37,6 @@
 /processorParam:TextureFormat=Color
 /build:Controls/button.png
 
-#begin Fonts/arial.ttf
-/importer:
-/processor:
-/build:Fonts/arial.ttf
-
 #begin Fonts/font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
