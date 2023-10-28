@@ -18,14 +18,15 @@ namespace MazeGame.States
     {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private List<Component> _components;
+        private SpriteFont _buttonFont;
 
-        public MenuState(MazeGameFinal game, GraphicsDevice graphicsDevice, ContentManager content)
+        public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
           : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/button");
-            var buttonFont = _content.Load<SpriteFont>("Fonts/font");
+            _buttonFont = _content.Load<SpriteFont>("Fonts/font");
 
-            var fromFileButton = new Button(buttonTexture, buttonFont)
+            var fromFileButton = new Button(buttonTexture, _buttonFont)
             {
                 Position = new Vector2(300, 200),
                 Text = "Load Maze From File",
@@ -33,7 +34,7 @@ namespace MazeGame.States
 
             fromFileButton.Click += FromFileButton_Click;
 
-            var recursionButton = new Button(buttonTexture, buttonFont)
+            var recursionButton = new Button(buttonTexture, _buttonFont)
             {
                 Position = new Vector2(300, 250),
                 Text = "Load Maze by Recursion",
@@ -41,7 +42,7 @@ namespace MazeGame.States
 
             recursionButton.Click += RecursionButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont)
+            var quitGameButton = new Button(buttonTexture, _buttonFont)
             {
                 Position = new Vector2(300, 300),
                 Text = "Quit Game",
@@ -49,18 +50,25 @@ namespace MazeGame.States
 
             quitGameButton.Click += QuitGameButton_Click;
 
+            var title = new TextField(_buttonFont)
+            {
+                Position = new Vector2(345, 150),
+                Text = "Bun Bun Maze",
+            };
+
             _components = new List<Component>()
             {
                 fromFileButton,
                 recursionButton,
                 quitGameButton,
+                title
             };
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-
+            _graphicsDevice.Clear(Color.CornflowerBlue);
             foreach (var component in _components)
                 component.Draw(gameTime, spriteBatch);
 
@@ -92,7 +100,7 @@ namespace MazeGame.States
 
         private void RecursionButton_Click(object sender, EventArgs e)
         {
-            //_game.ChangeState(new GameState(_game, _graphicsDevice, _content));
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
         }
 
         public override void PostUpdate(GameTime gameTime)

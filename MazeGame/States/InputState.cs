@@ -11,7 +11,7 @@ namespace MazeGame.States
 {
     public class InputState : State
     {
-        public InputState(MazeGameFinal game, GraphicsDevice graphicsDevice, ContentManager content)
+        public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
          : base(game, graphicsDevice, content)
         {
 

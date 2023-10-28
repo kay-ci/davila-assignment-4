@@ -1,94 +1,109 @@
-﻿using Maze;
-using Microsoft.Xna.Framework;
+﻿using MazeGame.States;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
+using Maze;
+using System.Drawing;
 
-namespace MazeGame;
-
-public class MazeGame : Game
+namespace MazeGame
 {
-    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-    private readonly GraphicsDeviceManager _graphics;
-    public const int Pixels = 32;
-    private bool _isMazeGenerated;
-    private string _filePath;
-    private SpriteBatch _spriteBatch;
-    private Texture2D _pathTexture;
-    private Texture2D _goalTexture;
-    private Texture2D _solidTexture;
-    private PlayerSprite _player;
-    public Map _map;
-    public MazeGame(string filePath)
+    public class MazeGame : Game
     {
-        _filePath = filePath;
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-        _logger.Info($"Map Loaded from: {_filePath}");
-    }
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private PlayerSprite _player;
+        public Map _map;
+        private State _currentState;
 
-    protected override void Initialize()
-    {
-        _map = new Map(new MazeFromFile.MazeFromFile(_filePath));
-        _map.CreateMap();
-        _player = new PlayerSprite(this, _map);
-        this.Components.Add( _player );
-        base.Initialize();
-    }
+        private State _nextState;
+        private IMapProvider _mapProvider;
 
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _goalTexture = Content.Load<Texture2D>("goal");
-        _pathTexture = Content.Load<Texture2D>("path");
-        _solidTexture = Content.Load<Texture2D>("solid");
-        base.LoadContent();
-    }
-
-    protected override void Update(GameTime gameTime)
-    {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
-           || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        public void ChangeState(State state)
         {
-            _logger.Info($"User pressed Escape Key...Exiting Game");
-            Exit();
+            _nextState = state;
         }
 
-        base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        if(!_isMazeGenerated) // Generate maze & goal Once
+        public MazeGame()
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            _graphics.PreferredBackBufferHeight = _map.Height * Pixels;
-            _graphics.PreferredBackBufferWidth = _map.Width * Pixels;
-            _graphics.ApplyChanges();
-            _spriteBatch.Begin();
-            for (int y = 0; y < _map.Height; y++)
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            ;
+        }
+
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize()
+        {
+            IsMouseVisible = true;
+            base.Initialize();
+        }
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            base.LoadContent();
+        }
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// game-specific content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            if (_nextState != null)
             {
-                for (int x = 0; x < _map.Width; x++)
-                {
-                    if (_map.MapGrid[y, x] == Block.Solid)
-                    {
-                        _spriteBatch.Draw(_solidTexture, new Vector2(x* Pixels, y* Pixels), new Rectangle(0,0, Pixels, Pixels), Color.White);
+                _currentState = _nextState;
 
-                    }
-                    else if (_map.MapGrid[y, x] == Block.Empty)
-                    {
-                        _spriteBatch.Draw(_pathTexture, new Vector2(x * Pixels, y * Pixels), new Rectangle(0, 0, Pixels, Pixels), Color.White);
-                    }
-        
-                }
+                _nextState = null;
             }
-            _spriteBatch.Draw(_goalTexture, new Vector2(_map.Goal.X * Pixels, _map.Goal.Y * Pixels), new Rectangle(0, 0, Pixels, Pixels), Color.White);
-            _logger.Info($"Goal located at X: {_map.Goal.X} Y: {_map.Goal.Y}");
-            _spriteBatch.End();
+            
+            _currentState.Update(gameTime);
+
+            _currentState.PostUpdate(gameTime);
+
+            base.Update(gameTime);
         }
-        _isMazeGenerated = true;
-        base.Draw(gameTime);
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            _currentState.Draw(gameTime, _spriteBatch);
+            //_graphics.PreferredBackBufferHeight = map.Height * Pixels;
+            //_graphics.PreferredBackBufferWidth = map.Width * Pixels;
+            //_graphics.ApplyChanges();
+            base.Draw(gameTime);
+        }
+    
     }
 }

@@ -18,7 +18,7 @@ namespace MazeGame.States
 
         protected GraphicsDevice _graphicsDevice;
 
-        protected MazeGameFinal _game;
+        protected MazeGame _game;
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace MazeGame.States
 
         public abstract void PostUpdate(GameTime gameTime);
 
-        public State(MazeGameFinal game, GraphicsDevice graphicsDevice, ContentManager content)
+        public State(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
         {
             _game = game;
 

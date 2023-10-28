@@ -23,7 +23,7 @@ namespace MazeGame.States
         private Map _map;
         private bool _isInitialized;
 
-        public GameState(MazeGameFinal game, GraphicsDevice graphicsDevice, ContentManager content, IMapProvider mapProvider)
+        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, IMapProvider mapProvider)
           : base(game, graphicsDevice, content)
         {
             _content.RootDirectory = "Content";
