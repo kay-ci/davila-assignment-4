@@ -18,10 +18,12 @@ namespace MazeGame.States
         private InputField _widthInput;
         private InputField _heightInput;
         private List<Component> _components;
+        private InputManager _inputManager;
 
         public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
          : base(game, graphicsDevice, content)
         {
+            _inputManager = InputManager.Instance;
             var inputTexture = _content.Load<Texture2D>("Controls/button");
             var font = _content.Load<SpriteFont>("Fonts/font");
 
@@ -30,22 +32,35 @@ namespace MazeGame.States
                 Text = "Maze Width: ",
                 Position = new Vector2(250, 200)
             };
-            _widthInput = new InputField("", font, new Vector2(400, 200));
-
+            _widthInput = new InputField(inputTexture, font, new Vector2(350, 200));
+            
             var heightLabel = new TextField(font)
             {
                 Text = "Maze Height: ",
                 Position = new Vector2(250, 250)
             };
-            var _heightInput = new InputField("", font, new Vector2(400, 250));
+            var _heightInput = new InputField(inputTexture, font, new Vector2(350, 250));
 
             var submitButton = new Button(inputTexture, font)
             {
-                Position = new Vector2(300, 300),
+                Position = new Vector2(300, 400),
                 Text = "Generate Maze!"
             };
-            submitButton.Click += GenerateRecursiveMaze;
 
+            // handle events
+            submitButton.Click += GenerateRecursiveMaze;
+            _widthInput.Click += (s, e) =>
+            {
+                _widthInput.IsSelected = true;
+                _heightInput.IsSelected = false;
+
+            };
+            _heightInput.Click += (s, e) =>
+            {
+                _widthInput.IsSelected = false;
+                _heightInput.IsSelected = true;
+
+            };
             _components = new List<Component>()
             {
                 widthLabel,
