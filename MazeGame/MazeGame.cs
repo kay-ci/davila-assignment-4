@@ -15,15 +15,11 @@ namespace MazeGame
 {
     public class MazeGame : Game
     {
-        private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private PlayerSprite _player;
         public Map _map;
         private State _currentState;
-
         private State _nextState;
-        private IMapProvider _mapProvider;
 
         public void ChangeState(State state)
         {
@@ -86,9 +82,6 @@ namespace MazeGame
             }
             
             _currentState.Update(gameTime);
-
-            _currentState.PostUpdate(gameTime);
-
             base.Update(gameTime);
         }
 

@@ -17,13 +17,12 @@ namespace MazeGame.States
     {
         private InputField _widthInput;
         private InputField _heightInput;
+        private TextField _errorBox;
         private List<Component> _components;
-        private InputManager _inputManager;
 
         public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
          : base(game, graphicsDevice, content)
         {
-            _inputManager = InputManager.Instance;
             var inputTexture = _content.Load<Texture2D>("Controls/button");
             var font = _content.Load<SpriteFont>("Fonts/font");
 
@@ -41,6 +40,12 @@ namespace MazeGame.States
             };
             _heightInput = new InputField(inputTexture, font, new Vector2(350, 250));
 
+            _errorBox = new TextField(font)
+            {
+                Position = new Vector2(250, 300),
+                PenColour = Color.Black,
+                Text = "Enter a width and height [5-99]"
+            };
             var submitButton = new Button(inputTexture, font)
             {
                 Position = new Vector2(300, 400),
@@ -67,7 +72,8 @@ namespace MazeGame.States
                 _widthInput,
                 heightLabel,
                 _heightInput,
-                submitButton
+                submitButton,
+                _errorBox
             };
         }
 
@@ -82,11 +88,6 @@ namespace MazeGame.States
             spriteBatch.End();
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-
-        }
-
         public override void Update(GameTime gameTime)
         {
             foreach (var component in _components)
@@ -97,17 +98,36 @@ namespace MazeGame.States
 
         private void GenerateRecursiveMaze(object sender, EventArgs e)
         {
+            _errorBox.PenColour = Color.Red;
             //assuming valid num done in input field
-            if (ValidInput(_widthInput.Text) && ValidInput(_heightInput.Text))
+            if(int.TryParse(_widthInput.Text, out int width) && int.TryParse(_heightInput.Text, out int height))
             {
-                IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
-                mapProvider.CreateMap(int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
+                if(width >= 5 && width < 100 && height >= 5 && height < 100)
+                {
+                    if ( width % 2 != 0 && height % 2 != 0)
+                    {
+                        IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
+                        mapProvider.CreateMap(int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
 
-                _game.ChangeState(new GameState(_game, _graphicsDevice, _content, mapProvider));
+                        _game.ChangeState(new GameState(_game, _graphicsDevice, _content, mapProvider));
+                    }
+                    else
+                    {
+                        _errorBox.Text = "Width and height must be odd numbers!";
+                    }
+                }
+                else
+                {
+                    _errorBox.Text = "Width and height must be between 5 and 99";
+                }
+            }
+            else
+            {
+                _errorBox.Text = "Please enter a width and height";
             }
         }
 
-        private bool ValidInput(string input)
+        private static bool ValidInput(string input)
         {
             if (int.TryParse(input, out int value))
             {

@@ -3,10 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MazeGame.Controls;
 using System.Windows.Forms;
 using Maze;
@@ -19,9 +15,7 @@ namespace MazeGame.States
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private List<Component> _components;
      
-
-        public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
-          : base(game, graphicsDevice, content)
+        public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content): base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/font");
@@ -32,6 +26,7 @@ namespace MazeGame.States
                 Text = "Load Maze From File",
             };
 
+            // Load maze from file
             fromFileButton.Click += FromFileButton_Click;
 
             var recursionButton = new Button(buttonTexture, buttonFont)
@@ -40,6 +35,7 @@ namespace MazeGame.States
                 Text = "Load Maze by Recursion",
             };
 
+            // Take to InputState 
             recursionButton.Click += RecursionButton_Click;
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
@@ -48,6 +44,7 @@ namespace MazeGame.States
                 Text = "Quit Game",
             };
 
+            // Exit game
             quitGameButton.Click += QuitGameButton_Click;
 
             var title = new TextField(buttonFont)
@@ -71,13 +68,11 @@ namespace MazeGame.States
             _graphicsDevice.Clear(Color.CornflowerBlue);
             foreach (var component in _components)
                 component.Draw(gameTime, spriteBatch);
-
             spriteBatch.End();
         }
 
         private void FromFileButton_Click(object sender, EventArgs e)
         {
-            
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "c:\\";
@@ -101,11 +96,6 @@ namespace MazeGame.States
         private void RecursionButton_Click(object sender, EventArgs e)
         {
             _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
-        }
-
-        public override void PostUpdate(GameTime gameTime)
-        {
-            // remove sprites if they're not needed
         }
 
         public override void Update(GameTime gameTime)

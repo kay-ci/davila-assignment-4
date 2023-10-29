@@ -76,11 +76,6 @@ namespace MazeGame.States
 
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-
-        }
-
         public override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
