@@ -18,15 +18,15 @@ namespace MazeGame.States
     {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private List<Component> _components;
-        private SpriteFont _buttonFont;
+     
 
         public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
           : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/button");
-            _buttonFont = _content.Load<SpriteFont>("Fonts/font");
+            var buttonFont = _content.Load<SpriteFont>("Fonts/font");
 
-            var fromFileButton = new Button(buttonTexture, _buttonFont)
+            var fromFileButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(300, 200),
                 Text = "Load Maze From File",
@@ -34,7 +34,7 @@ namespace MazeGame.States
 
             fromFileButton.Click += FromFileButton_Click;
 
-            var recursionButton = new Button(buttonTexture, _buttonFont)
+            var recursionButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(300, 250),
                 Text = "Load Maze by Recursion",
@@ -42,7 +42,7 @@ namespace MazeGame.States
 
             recursionButton.Click += RecursionButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, _buttonFont)
+            var quitGameButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(300, 300),
                 Text = "Quit Game",
@@ -50,7 +50,7 @@ namespace MazeGame.States
 
             quitGameButton.Click += QuitGameButton_Click;
 
-            var title = new TextField(_buttonFont)
+            var title = new TextField(buttonFont)
             {
                 Position = new Vector2(345, 150),
                 Text = "Bun Bun Maze",
