@@ -39,7 +39,7 @@ namespace MazeGame.States
                 Text = "Maze Height: ",
                 Position = new Vector2(250, 250)
             };
-            var _heightInput = new InputField(inputTexture, font, new Vector2(350, 250));
+            _heightInput = new InputField(inputTexture, font, new Vector2(350, 250));
 
             var submitButton = new Button(inputTexture, font)
             {
