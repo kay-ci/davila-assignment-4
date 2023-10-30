@@ -18,7 +18,7 @@ public class MazeRecursion : IMapProvider
         //pick random initial vector
         int rWidth = random.Next(0, width);
         int rHeight = random.Next(0, height);
-        MapVector initial = new MapVector(rWidth, rHeight);
+        MapVector initial = new(rWidth, rHeight);
 
         //shuffled enums
         Direction[] shuffledEnums = (Direction[])Enum.GetValues(typeof(Direction));

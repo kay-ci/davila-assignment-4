@@ -12,22 +12,21 @@ namespace MazeGame.States
     public class GameState : State
     {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-        private readonly GraphicsDeviceManager _graphics;
         public const int Pixels = 32;
         private bool _isMazeGenerated;
         private Texture2D _goalTexture;
         private Texture2D _pathTexture;
         private Texture2D _solidTexture;
-        private IMapProvider _mapProvider;
+        private readonly IMapProvider _mapProvider;
         private PlayerSprite _player;
         private Map _map;
         private bool _isInitialized;
 
-        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, IMapProvider mapProvider)
+        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map)
           : base(game, graphicsDevice, content)
         {
             _content.RootDirectory = "Content";
-            _mapProvider = mapProvider;
+            _map = map;
             game.IsMouseVisible = true;
             
         }
@@ -36,8 +35,10 @@ namespace MazeGame.States
         {
             if (!_isInitialized)
             {
-                _map = new(_mapProvider);
+                // Generate Map Grid
                 _map.CreateMap();
+
+                // Initialize Player
                 _player = new PlayerSprite(_game, _map);
                 _game.Components.Add(_player);
             }

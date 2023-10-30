@@ -87,7 +87,8 @@ namespace MazeGame.States
                     //Get the path of specified file
                     var filePath = openFileDialog.FileName;
                     IMapProvider mapProvider = new MazeFromFile.MazeFromFile(filePath);
-                    _game.ChangeState(new GameState(_game, _graphicsDevice, _content, mapProvider));
+                    Map fileMap = new(mapProvider);
+                    _game.ChangeState(new GameState(_game, _graphicsDevice, _content, fileMap));
                     _logger.Info($"Map Loaded from: {filePath}");
                 }
             }

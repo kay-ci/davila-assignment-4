@@ -15,10 +15,10 @@ namespace MazeGame.States
 {
     public class InputState : State
     {
-        private InputField _widthInput;
-        private InputField _heightInput;
-        private TextField _errorBox;
-        private List<Component> _components;
+        private readonly InputField _widthInput;
+        private readonly InputField _heightInput;
+        private readonly TextField _errorBox;
+        private readonly List<Component> _components;
 
         public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
          : base(game, graphicsDevice, content)
@@ -107,9 +107,9 @@ namespace MazeGame.States
                     if ( width % 2 != 0 && height % 2 != 0)
                     {
                         IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
-                        mapProvider.CreateMap(int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
+                        Map recursiveMap = new(mapProvider, int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
 
-                        _game.ChangeState(new GameState(_game, _graphicsDevice, _content, mapProvider));
+                        _game.ChangeState(new GameState(_game, _graphicsDevice, _content, recursiveMap));
                     }
                     else
                     {
@@ -125,18 +125,6 @@ namespace MazeGame.States
             {
                 _errorBox.Text = "Please enter a width and height";
             }
-        }
-
-        private static bool ValidInput(string input)
-        {
-            if (int.TryParse(input, out int value))
-            {
-                if (value >= 5 && value <= 99 && value % 2 != 0)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }
