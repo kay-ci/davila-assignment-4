@@ -90,7 +90,8 @@ public class MazeRecursion : IMapProvider
         }
         return newDir;
     }
-    // uses the Fisher-Yates algorithm, code from stackOverflow
+    // uses the Fisher-Yates algorithm, code example from StackOverflow
+    // url: https://stackoverflow.com/questions/108819/best-way-to-randomize-an-array-with-net
     private static Direction[] Shuffle(Random random, Direction[] dirArray)
     {
         int n = dirArray.Length;
