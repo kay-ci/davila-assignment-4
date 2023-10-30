@@ -1,13 +1,13 @@
 ﻿namespace MazeRecursion;
-using Maze;
 using System;
+using Maze;
 using System.Linq;
 using System.Windows.Markup;
 
 public class MazeRecursion : IMapProvider
 {
     private List<MapVector> _previouslyVisited;
-    private bool[,] _visitedArray;
+    private bool[,]? _visitedArray;
     private Random _random;
     public MazeRecursion()
     {
@@ -39,18 +39,17 @@ public class MazeRecursion : IMapProvider
 
     private Direction[,] Walk(MapVector currentPos, Direction[,] directionsArray)
     {
-        _visitedArray[currentPos.Y, currentPos.X] = true;
-
-        //_previouslyVisited.Add(currentPos);
-
-        //shuffled enums
-        Direction[] shuffledEnums = (Direction[])Enum.GetValues(typeof(Direction));
-        shuffledEnums = shuffledEnums.OrderBy(_ => _random.Next()).ToArray();
-
-        foreach (Direction dir in shuffledEnums)
+        if (_visitedArray != null)
         {
-            if (dir != Direction.None)
+            _visitedArray[currentPos.Y, currentPos.X] = true;
+
+            //shuffled enums
+            Direction[] enums = new Direction[] { Direction.N, Direction.E, Direction.S, Direction.W};
+            Direction[] shuffledEnums = Shuffle(_random, enums);
+
+            foreach (Direction dir in shuffledEnums)
             {
+                
                 var forwardPos = dir + currentPos;
                 var oppositeDir = GetOppositeDirection(dir);
                 if (forwardPos.InsideBoundary(directionsArray.GetLength(1), directionsArray.GetLength(0)))
@@ -62,8 +61,9 @@ public class MazeRecursion : IMapProvider
                         directionsArray = Walk(forwardPos, directionsArray);
                     }
                 }
-            }
+                
 
+            }
         }
         return directionsArray;
     }
@@ -90,7 +90,17 @@ public class MazeRecursion : IMapProvider
         }
         return newDir;
     }
-
+    // uses the Fisher-Yates algorithm, code from stackOverflow
+    private static Direction[] Shuffle(Random random, Direction[] dirArray)
+    {
+        int n = dirArray.Length;
+        while (n > 1)
+        {
+            int k = random.Next(n--);
+            (dirArray[k], dirArray[n]) = (dirArray[n], dirArray[k]);
+        }
+        return dirArray;
+    }
 
     public Direction[,] CreateMap()
     {

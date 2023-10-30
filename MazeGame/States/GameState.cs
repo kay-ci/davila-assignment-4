@@ -17,10 +17,10 @@ namespace MazeGame.States
         private Texture2D _goalTexture;
         private Texture2D _pathTexture;
         private Texture2D _solidTexture;
-        private readonly IMapProvider _mapProvider;
         private PlayerSprite _player;
         private Map _map;
         private bool _isInitialized;
+        
 
         public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map)
           : base(game, graphicsDevice, content)
@@ -28,7 +28,7 @@ namespace MazeGame.States
             _content.RootDirectory = "Content";
             _map = map;
             game.IsMouseVisible = true;
-            
+
         }
       
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -51,7 +51,10 @@ namespace MazeGame.States
             if (!_isMazeGenerated) // Generate maze & goal Once
             {
                 _graphicsDevice.Clear(Color.CornflowerBlue);
-                
+                _game.Graphics.PreferredBackBufferHeight = _map.Height * Pixels;
+                _game.Graphics.PreferredBackBufferWidth = _map.Width * Pixels;
+                _game.Graphics.ApplyChanges();
+
                 spriteBatch.Begin();
                 for (int y = 0; y < _map.Height; y++)
                 {

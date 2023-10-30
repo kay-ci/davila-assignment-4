@@ -15,11 +15,10 @@ namespace MazeGame
 {
     public class MazeGame : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public Map _map;
         private State _currentState;
         private State _nextState;
+        public GraphicsDeviceManager Graphics;
 
         public void ChangeState(State state)
         {
@@ -28,9 +27,8 @@ namespace MazeGame
 
         public MazeGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            ;
         }
 
         /// <summary>
@@ -54,7 +52,7 @@ namespace MazeGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
+            _currentState = new MenuState(this, GraphicsDevice, Content);
             base.LoadContent();
         }
 
@@ -90,11 +88,8 @@ namespace MazeGame
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {
+        {    
             _currentState.Draw(gameTime, _spriteBatch);
-            //_graphics.PreferredBackBufferHeight = map.Height * Pixels;
-            //_graphics.PreferredBackBufferWidth = map.Width * Pixels;
-            //_graphics.ApplyChanges();
             base.Draw(gameTime);
         }
     
