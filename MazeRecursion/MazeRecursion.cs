@@ -1,20 +1,25 @@
 ﻿namespace MazeRecursion;
 using System;
 using Maze;
-using System.Linq;
-using System.Windows.Markup;
 
 public class MazeRecursion : IMapProvider
 {
-    private List<MapVector> _previouslyVisited;
     private bool[,]? _visitedArray;
     private Random _random;
     public MazeRecursion()
     {
         _random = new Random();
-        _previouslyVisited = new List<MapVector>();
     }
-
+    public MazeRecursion(int seed)
+    {
+        _random = new Random(seed);
+    }
+    /// <summary>
+    /// Creates a direction map recursively
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <returns>A Direction array representing the maze</returns>
     public Direction[,] CreateMap(int width, int height)
     {
         int arrayWidth = (width - 1) / 2;
@@ -22,15 +27,11 @@ public class MazeRecursion : IMapProvider
 
         Direction[,] directionsArray = new Direction[arrayHeight, arrayWidth];
         _visitedArray = new bool[arrayHeight, arrayWidth];
-        //pick random initial vector
-        MapVector initial;
-        do
-        {
-            int rWidth = _random.Next(0, arrayWidth);
-            int rHeight = _random.Next(0, arrayHeight);
-            initial = new(rWidth, rHeight);
-        } while (!initial.InsideBoundary(arrayWidth, arrayHeight));
 
+        //pick random initial vector
+        int rWidth = _random.Next(0, arrayWidth);
+        int rHeight = _random.Next(0, arrayHeight);
+        MapVector initial = new(rWidth, rHeight);
 
         // Start Walking
         Walk(initial, directionsArray);
@@ -43,7 +44,7 @@ public class MazeRecursion : IMapProvider
         {
             _visitedArray[currentPos.Y, currentPos.X] = true;
 
-            //shuffled enums
+            // Shuffled enums
             Direction[] enums = new Direction[] { Direction.N, Direction.E, Direction.S, Direction.W};
             Direction[] shuffledEnums = Shuffle(_random, enums);
 
