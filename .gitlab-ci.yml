@@ -27,7 +27,7 @@ deployment:
     - apt-get install zip -y
   script:
     - cd MazeGame
-    - dotnet publish -c Release --runtime win-x64 -o publish_output
+    - dotnet publish -c Release -r win-x64 -o publish_output
     - cd publish_output
     - zip -r MazeGame.zip .
   artifacts:
