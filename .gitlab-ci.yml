@@ -28,8 +28,7 @@ deployment:
   script:
     - cd MazeGame
     - dotnet publish -c Release -o publish_output
-    - cd publish_output
-    - zip -r MazeGame.zip .
+    - zip -r MazeGame.zip publish_output/.
   artifacts:
     paths:
       - MazeGame/publish_output/MazeGame.zip
