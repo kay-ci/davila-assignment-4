@@ -54,7 +54,7 @@ namespace MazeGame.Controls
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var color = Color.White;
-            if (_isHovering)
+            if (_isHovering || IsSelected)
                 color = Color.Gray;
             spriteBatch.Draw(_texture, Rectangle, color);
             spriteBatch.DrawString(_font, Text, new Vector2(_position.X + 80, _position.Y+10), Color.Black);
