@@ -1,42 +1,63 @@
 ﻿namespace MazeRecursion;
 using Maze;
+using System;
 using System.Linq;
 using System.Windows.Markup;
 
 public class MazeRecursion : IMapProvider
 {
     private List<MapVector> _previouslyVisited;
-
+    private Random _random;
     public MazeRecursion() {
+        _random = new Random();
         _previouslyVisited = new List<MapVector>();
     }
 
     public Direction[,] CreateMap(int width, int height)
     {
-        Direction[,] directionsArray = new Direction[width, height];
-        Random random = new Random();
-        //pick random initial vector
-        int rWidth = random.Next(0, width);
-        int rHeight = random.Next(0, height);
-        MapVector initial = new(rWidth, rHeight);
+        int arrayWidth = (width - 1)/2;
+        int arrayHeight = (height - 1)/2;
 
-        //shuffled enums
-        Direction[] shuffledEnums = (Direction[])Enum.GetValues(typeof(Direction));
-        shuffledEnums = shuffledEnums.OrderBy(_ => random.Next()).ToArray();
-        foreach (Direction dir in shuffledEnums)
+        Direction[,] directionsArray = new Direction[arrayWidth, arrayHeight];
+        //pick random initial vector
+        MapVector initial;
+        do
         {
-            var forwardPos = dir + initial;
-            var oppositeDir = GetOppositeDirection(dir);
-            if (forwardPos.InsideBoundary(width, height) && !_previouslyVisited.Contains(forwardPos))
-            {
-                directionsArray[forwardPos.X, forwardPos.Y] = dir | oppositeDir;
-            }
-        }
-        _previouslyVisited.Add(initial);
+            int rWidth = _random.Next(0, arrayWidth);
+            int rHeight = _random.Next(0, arrayHeight);
+            initial = new(rWidth, rHeight);
+        } while (initial.InsideBoundary(arrayWidth, arrayHeight));
+        
+
+        // Start Walking
+        Walk(initial, directionsArray);
         return directionsArray;    
     }
     
+    private void Walk(MapVector currentPos, Direction[,] directionsArray)
+    {
+        _previouslyVisited.Add(currentPos);
 
+        //shuffled enums
+        Direction[] shuffledEnums = (Direction[])Enum.GetValues(typeof(Direction));
+        shuffledEnums = shuffledEnums.OrderBy(_ => _random.Next()).ToArray();
+
+        foreach (Direction dir in shuffledEnums)
+        {
+            if (dir != Direction.None)
+            {
+                var forwardPos = dir + currentPos;
+                var oppositeDir = GetOppositeDirection(dir);
+                if (forwardPos.InsideBoundary(directionsArray.GetLength(0), directionsArray.GetLength(1)) && !_previouslyVisited.Contains(forwardPos))
+                {
+
+                    directionsArray[forwardPos.X, forwardPos.Y] = dir | oppositeDir;
+                    Walk(forwardPos, directionsArray);
+                }
+            }
+            
+        }
+    }
     static private Direction GetOppositeDirection(Direction dir)
     {
         Direction newDir;

@@ -32,6 +32,7 @@ namespace Maze
         }
         public Map(IMapProvider mapProvider, int gridWidth, int gridheight)
         {
+            _random = new();
             _mapProvider = mapProvider;
             _gridWidth = gridWidth;
             _gridHeight = gridheight;
