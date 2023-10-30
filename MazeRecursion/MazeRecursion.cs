@@ -7,18 +7,21 @@ using System.Windows.Markup;
 public class MazeRecursion : IMapProvider
 {
     private List<MapVector> _previouslyVisited;
+    private bool[,] _visitedArray;
     private Random _random;
-    public MazeRecursion() {
+    public MazeRecursion()
+    {
         _random = new Random();
         _previouslyVisited = new List<MapVector>();
     }
 
     public Direction[,] CreateMap(int width, int height)
     {
-        int arrayWidth = (width - 1)/2;
-        int arrayHeight = (height - 1)/2;
+        int arrayWidth = (width - 1) / 2;
+        int arrayHeight = (height - 1) / 2;
 
-        Direction[,] directionsArray = new Direction[arrayWidth, arrayHeight];
+        Direction[,] directionsArray = new Direction[arrayHeight, arrayWidth];
+        _visitedArray = new bool[arrayHeight, arrayWidth];
         //pick random initial vector
         MapVector initial;
         do
@@ -26,17 +29,19 @@ public class MazeRecursion : IMapProvider
             int rWidth = _random.Next(0, arrayWidth);
             int rHeight = _random.Next(0, arrayHeight);
             initial = new(rWidth, rHeight);
-        } while (initial.InsideBoundary(arrayWidth, arrayHeight));
-        
+        } while (!initial.InsideBoundary(arrayWidth, arrayHeight));
+
 
         // Start Walking
         Walk(initial, directionsArray);
-        return directionsArray;    
+        return directionsArray;
     }
-    
-    private void Walk(MapVector currentPos, Direction[,] directionsArray)
+
+    private Direction[,] Walk(MapVector currentPos, Direction[,] directionsArray)
     {
-        _previouslyVisited.Add(currentPos);
+        _visitedArray[currentPos.Y, currentPos.X] = true;
+
+        //_previouslyVisited.Add(currentPos);
 
         //shuffled enums
         Direction[] shuffledEnums = (Direction[])Enum.GetValues(typeof(Direction));
@@ -48,24 +53,28 @@ public class MazeRecursion : IMapProvider
             {
                 var forwardPos = dir + currentPos;
                 var oppositeDir = GetOppositeDirection(dir);
-                if (forwardPos.InsideBoundary(directionsArray.GetLength(0), directionsArray.GetLength(1)) && !_previouslyVisited.Contains(forwardPos))
+                if (forwardPos.InsideBoundary(directionsArray.GetLength(1), directionsArray.GetLength(0)))
                 {
-
-                    directionsArray[forwardPos.X, forwardPos.Y] = dir | oppositeDir;
-                    Walk(forwardPos, directionsArray);
+                    if (!_visitedArray[forwardPos.Y, forwardPos.X])
+                    {
+                        directionsArray[currentPos.Y, currentPos.X] = directionsArray[currentPos.Y, currentPos.X] | dir;
+                        directionsArray[forwardPos.Y, forwardPos.X] = directionsArray[forwardPos.Y, forwardPos.X] | oppositeDir;
+                        directionsArray = Walk(forwardPos, directionsArray);
+                    }
                 }
             }
-            
+
         }
+        return directionsArray;
     }
     static private Direction GetOppositeDirection(Direction dir)
     {
         Direction newDir;
-        switch(dir)
+        switch (dir)
         {
             case Direction.N:
                 newDir = Direction.S;
-                break;    
+                break;
             case Direction.E:
                 newDir = Direction.W;
                 break;
@@ -82,7 +91,7 @@ public class MazeRecursion : IMapProvider
         return newDir;
     }
 
-    
+
     public Direction[,] CreateMap()
     {
         throw new NotImplementedException();

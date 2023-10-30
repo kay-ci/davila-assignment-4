@@ -73,8 +73,8 @@ namespace Maze
 
             while (true)
             {
-                goalX = _random.Next(0, _directionMaze.GetLength(1));
-                goalY = _random.Next(1, _directionMaze.GetLength(0));
+                goalX = _random.Next(0, _directionMaze.GetLength(1) );
+                goalY = _random.Next(0, _directionMaze.GetLength(0) );
                 Goal = new MapVector(ToGrid(goalX), ToGrid(goalY));
                 if(IsValidGoal(goalY, goalX)) {
                     break;
