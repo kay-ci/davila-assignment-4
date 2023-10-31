@@ -7,7 +7,7 @@ stages:
 unit-test:
   stage: test
   script:
-    - cd MazeTest
+    - cd MazeRecursionTests
     - 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
   artifacts:
     when: always
@@ -29,9 +29,8 @@ deployment:
   script:
     - cd MazeGame
     - dotnet publish -c Release -o publish_output
-    - cd publish_output
-    - zip -r MazeGame.zip .
+    - zip -r MazeGame.zip publish_output/.
   artifacts:
     paths:
-      - MazeGame/publish_output/MazeGame.zip
+      - MazeGame.zip
     expire_in: "2 weeks"

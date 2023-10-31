@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,15 +22,16 @@ namespace Maze
 
         public bool InsideBoundary(int width, int height)
         {
-            if (X > 0 && Y > 0 && X < width && Y < height)
+            bool valid = false;
+            if (X >= 0 && Y >= 0 && X < width && Y < height)
             {
-                IsValid = true;
+                valid = true;
             }
-            if (X > width || Y > height || X < 0 || Y < 0)
+            else
             {
-                IsValid = false;
+                valid = false;
             }
-            return IsValid;
+            return valid;
 
         }
 

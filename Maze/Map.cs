@@ -20,6 +20,9 @@ namespace Maze
 
         public IPlayer Player {get; set;}
         private readonly IMapProvider _mapProvider;
+        private readonly int _gridWidth;
+        private readonly int _gridHeight;
+
         public Direction [,] _directionMaze { get; set; }
 
         public Map(IMapProvider mapProvider)
@@ -27,10 +30,24 @@ namespace Maze
             _mapProvider = mapProvider;  
             _random = new();
         }
-
+        public Map(IMapProvider mapProvider, int gridWidth, int gridheight)
+        {
+            _random = new();
+            _mapProvider = mapProvider;
+            _gridWidth = gridWidth;
+            _gridHeight = gridheight;
+        }
         public void CreateMap()
         {
-            _directionMaze = _mapProvider.CreateMap();
+            if (_gridWidth > 0 && _gridHeight > 0)
+            {
+                _directionMaze = _mapProvider.CreateMap(_gridWidth, _gridHeight);
+            }
+            else
+            {
+                _directionMaze = _mapProvider.CreateMap();
+
+            }
             Height = _directionMaze.GetLength(0)*2+1;
             Width = _directionMaze.GetLength(1)*2+1;
 
@@ -56,8 +73,8 @@ namespace Maze
 
             while (true)
             {
-                goalX = _random.Next(0, _directionMaze.GetLength(1));
-                goalY = _random.Next(1, _directionMaze.GetLength(0));
+                goalX = _random.Next(0, _directionMaze.GetLength(1) );
+                goalY = _random.Next(0, _directionMaze.GetLength(0) );
                 Goal = new MapVector(ToGrid(goalX), ToGrid(goalY));
                 if(IsValidGoal(goalY, goalX)) {
                     break;

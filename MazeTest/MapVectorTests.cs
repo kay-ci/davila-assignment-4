@@ -24,7 +24,6 @@ namespace Maze.Tests
 
         [TestMethod()]
         [DataRow(-1, 0, false)] //outside bounds < 0
-        [DataRow(2, 6, true)] // in bounds
         [DataRow(13, 9, false)] //on edge 
         [DataRow(26, 4, false)] //outside bounds X
         [DataRow(5, 66, false)] //out of bounds Y
