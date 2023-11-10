@@ -15,8 +15,12 @@ namespace MazeGame.States
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
         private List<Component> _components;
      
-        public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content): base(game, graphicsDevice, content)
+        public MenuState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, string stateName): base(game, graphicsDevice, content, stateName)
         {
+            if (string.IsNullOrEmpty(stateName))
+            {
+                throw new ArgumentNullException(nameof(stateName));
+            }
             var buttonTexture = _content.Load<Texture2D>("Controls/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/font");
 
@@ -106,12 +110,12 @@ namespace MazeGame.States
 
         private void RecursionClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content, "recursion"));
         }
 
         private void HuntKillClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content, "huntKill"));
         }
 
         public override void Update(GameTime gameTime)

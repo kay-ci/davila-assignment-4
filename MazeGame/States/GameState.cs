@@ -6,6 +6,7 @@ using System.Drawing;
 using Maze;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
+using System;
 
 namespace MazeGame.States
 {
@@ -22,9 +23,13 @@ namespace MazeGame.States
         private bool _isInitialized;
         
 
-        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map)
-          : base(game, graphicsDevice, content)
+        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map, string stateName)
+          : base(game, graphicsDevice, content, stateName)
         {
+            if (string.IsNullOrEmpty(stateName))
+            {
+                throw new ArgumentNullException(nameof(stateName));
+            }
             _content.RootDirectory = "Content";
             _map = map;
             game.IsMouseVisible = true;

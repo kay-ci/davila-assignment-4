@@ -52,7 +52,7 @@ namespace MazeGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             
-            _currentState = new MenuState(this, GraphicsDevice, Content);
+            _currentState = new MenuState(this, GraphicsDevice, Content, "menu");
             base.LoadContent();
         }
 

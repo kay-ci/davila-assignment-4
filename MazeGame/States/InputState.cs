@@ -20,9 +20,13 @@ namespace MazeGame.States
         private readonly TextField _errorBox;
         private readonly List<Component> _components;
 
-        public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
-         : base(game, graphicsDevice, content)
+        public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, string stateName)
+         : base(game, graphicsDevice, content, stateName)
         {
+            if (string.IsNullOrEmpty(stateName))
+            {
+                throw new ArgumentNullException(nameof(stateName));
+            }
             var inputTexture = _content.Load<Texture2D>("Controls/button");
             var font = _content.Load<SpriteFont>("Fonts/font");
 
