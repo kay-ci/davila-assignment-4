@@ -20,43 +20,53 @@ namespace MazeGame.States
             var buttonTexture = _content.Load<Texture2D>("Controls/button");
             var buttonFont = _content.Load<SpriteFont>("Fonts/font");
 
-            var fromFileButton = new Button(buttonTexture, buttonFont)
-            {
-                Position = new Vector2(300, 200),
-                Text = "Load Maze From File",
-            };
-
-            // Load maze from file
-            fromFileButton.Click += FromFileButton_Click;
-
-            var recursionButton = new Button(buttonTexture, buttonFont)
-            {
-                Position = new Vector2(300, 250),
-                Text = "Load Maze by Recursion",
-            };
-
-            // Take to InputState 
-            recursionButton.Click += RecursionButton_Click;
-
-            var quitGameButton = new Button(buttonTexture, buttonFont)
-            {
-                Position = new Vector2(300, 300),
-                Text = "Quit Game",
-            };
-
-            // Exit game
-            quitGameButton.Click += QuitGameButton_Click;
-
+            // TextField
             var title = new TextField(buttonFont)
             {
                 Position = new Vector2(345, 150),
                 Text = "Bun Bun Maze",
             };
 
+            // Load maze from file
+            var fromFileButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 200),
+                Text = "Load File Maze",
+            };
+
+            fromFileButton.Click += FromFileClick;
+
+            // Load maze with Recursion algorithm
+            var recursionButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 250),
+                Text = "Load Recursion Maze",
+            };
+
+            // Navigate to InputState 
+            recursionButton.Click += RecursionClick;
+
+            // Load maze with Hunt & Kill algorithm
+            var huntKillButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 300),
+                Text = "Load Hunt & Kill maze",
+            };
+            huntKillButton.Click += HuntKillClick;
+            // Exit game
+            var quitGameButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 350),
+                Text = "Quit Game",
+            };
+
+            quitGameButton.Click += QuitGameClick;
+
             _components = new List<Component>()
             {
                 fromFileButton,
                 recursionButton,
+                huntKillButton,
                 quitGameButton,
                 title
             };
@@ -71,7 +81,7 @@ namespace MazeGame.States
             spriteBatch.End();
         }
 
-        private void FromFileButton_Click(object sender, EventArgs e)
+        private void FromFileClick(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -94,7 +104,12 @@ namespace MazeGame.States
             }
         }
 
-        private void RecursionButton_Click(object sender, EventArgs e)
+        private void RecursionClick(object sender, EventArgs e)
+        {
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
+        }
+
+        private void HuntKillClick(object sender, EventArgs e)
         {
             _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
         }
@@ -105,7 +120,7 @@ namespace MazeGame.States
                 component.Update(gameTime);
         }
 
-        private void QuitGameButton_Click(object sender, EventArgs e)
+        private void QuitGameClick(object sender, EventArgs e)
         {
             _game.Exit();
             MessageBox.Show("Thank you for Playing!", "Bun Bun Maze", MessageBoxButtons.OK);
