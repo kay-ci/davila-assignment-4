@@ -15,16 +15,13 @@ namespace MazeGame.States
 
         protected MazeGame _game;
 
-        protected string _stateName;
-
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
-        public State(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, string stateName)
+        public State(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
         {
             _game = game;
             _graphicsDevice = graphicsDevice;
             _content = content;
-            _stateName = stateName;
         }
 
         public abstract void Update(GameTime gameTime);

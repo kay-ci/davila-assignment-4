@@ -23,13 +23,9 @@ namespace MazeGame.States
         private bool _isInitialized;
         
 
-        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map, string stateName)
-          : base(game, graphicsDevice, content, stateName)
+        public GameState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, Map map)
+          : base(game, graphicsDevice, content)
         {
-            if (string.IsNullOrEmpty(stateName))
-            {
-                throw new ArgumentNullException(nameof(stateName));
-            }
             _content.RootDirectory = "Content";
             _map = map;
             game.IsMouseVisible = true;
