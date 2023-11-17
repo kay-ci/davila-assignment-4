@@ -30,6 +30,18 @@ internal class MazeRecursion : IMapProvider
     /// <returns>A Direction array representing the maze</returns>
     public Direction[,] CreateMap(int width, int height)
     {
+        // Validate width
+        if (width <= 0 || width % 2 == 0)
+        {
+            throw new ArgumentException("Width must be a positive odd number.", nameof(width));
+        }
+
+        // Validate height
+        if (height <= 0 || height % 2 == 0)
+        {
+            throw new ArgumentException("Height must be a positive odd number.", nameof(height));
+        }
+
         int arrayWidth = (width - 1) / 2;
         int arrayHeight = (height - 1) / 2;
 
@@ -110,8 +122,16 @@ internal class MazeRecursion : IMapProvider
         return dirArray;
     }
 
+    /// <summary>
+    /// Create a Direction array with default size 9x7 recursively
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public Direction[,] CreateMap()
     {
-        throw new NotImplementedException();
+        int defaultWidth = 9;
+        int defaultHeight = 7;
+
+        return CreateMap(defaultWidth, defaultHeight);
     }
 }

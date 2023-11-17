@@ -27,6 +27,18 @@ internal class MazeHuntKill : IMapProvider
     }
     public Direction[,] CreateMap(int width, int height)
     {
+        // Validate width
+        if (width <= 0 || width % 2 == 0)
+        {
+            throw new ArgumentException("Width must be a positive odd number.", nameof(width));
+        }
+
+        // Validate height
+        if (height <= 0 || height % 2 == 0)
+        {
+            throw new ArgumentException("Height must be a positive odd number.", nameof(height));
+        }
+
         int arrayWidth = (width - 1) / 2;
         int arrayHeight = (height - 1) / 2;
 
