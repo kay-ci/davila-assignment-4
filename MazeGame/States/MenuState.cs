@@ -7,6 +7,8 @@ using MazeGame.Controls;
 using System.Windows.Forms;
 using Maze;
 using Button = MazeGame.Controls.Button;
+using MazeRecursion;
+using MazeHuntKill;
 
 namespace MazeGame.States
 {
@@ -124,7 +126,7 @@ namespace MazeGame.States
         /// <param name="e">event being triggered</param>
         private void RecursionClick(object sender, EventArgs e)
         {
-            IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
+            IMapProvider mapProvider = MazeRecursionCreator.CreateRecursion();
             _game.ChangeState(new InputState(_game, _graphicsDevice, _content, mapProvider));
         }
 
@@ -135,7 +137,7 @@ namespace MazeGame.States
         /// <param name="e"></param>
         private void HuntKillClick(object sender, EventArgs e)
         {
-            IMapProvider mapProvider = new MazeHuntKill.MazeHuntKill();
+            IMapProvider mapProvider = MazeHuntKillCreator.CreateHuntKill();
             _game.ChangeState(new InputState(_game, _graphicsDevice, _content, mapProvider));
         }
 

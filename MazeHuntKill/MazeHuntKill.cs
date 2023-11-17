@@ -3,12 +3,19 @@ using Maze;
 using System.ComponentModel;
 using System.Diagnostics;
 
-public class MazeHuntKill : IMapProvider
+public static class MazeHuntKillCreator
+{
+    public static IMapProvider CreateHuntKill()
+    {
+        return new MazeHuntKill();
+    }
+}
+internal class MazeHuntKill : IMapProvider
 {
     private readonly Random _random;
     private bool[,]? _visitedArray;
     private MapVector _currentPosition;
-    public MazeHuntKill() 
+    internal MazeHuntKill() 
     {
         _random = new Random();
         _currentPosition = new MapVector(0,0);

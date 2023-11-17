@@ -3,11 +3,18 @@ using System;
 using System.Diagnostics;
 using Maze;
 
-public class MazeRecursion : IMapProvider
+public static class MazeRecursionCreator
+{
+    public static IMapProvider CreateRecursion()
+    {
+        return new MazeRecursion();
+    }
+}
+internal class MazeRecursion : IMapProvider
 {
     private bool[,]? _visitedArray;
     private readonly Random _random;
-    public MazeRecursion()
+    internal MazeRecursion()
     {
         _random = new Random();
     }
