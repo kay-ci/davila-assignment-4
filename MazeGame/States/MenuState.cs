@@ -106,12 +106,14 @@ namespace MazeGame.States
 
         private void RecursionClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
+            IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content, mapProvider));
         }
 
         private void HuntKillClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new InputState(_game, _graphicsDevice, _content));
+            IMapProvider mapProvider = new MazeHuntKill.MazeHuntKill();
+            _game.ChangeState(new InputState(_game, _graphicsDevice, _content, mapProvider));
         }
 
         public override void Update(GameTime gameTime)

@@ -24,34 +24,53 @@ public class MazeHuntKill : IMapProvider
         int rWidth = _random.Next(0, arrayWidth);
         int rHeight = _random.Next(0, arrayHeight);
         _currentPosition = new(rWidth, rHeight);
-        do
+        while (true)
         {
-            // Walking phase here
             _visitedArray[_currentPosition.Y, _currentPosition.X] = true;
 
-            // Choose a random valid Direction 
-            Direction[] validDirections = getValidDirections(directionArray);
-            Direction randomValidDir = validDirections[_random.Next(0, validDirections.Length)];
+            // Walking phase here
+            bool walkedSuccessfully = Walk(directionArray);
 
-            // Next position info
-            MapVector nextPosition = randomValidDir + _currentPosition ;
-            Direction oppositeDir = GetOppositeDirection(randomValidDir);
-
-            // Update current position
-            directionArray[_currentPosition.Y, _currentPosition.X] = directionArray[_currentPosition.Y, _currentPosition.X]  | randomValidDir;
-
-            // Update next position 
-            directionArray[nextPosition.Y, nextPosition.X] = directionArray[nextPosition.Y, nextPosition.X] | oppositeDir;
-
-            // Update current position 
-            _currentPosition = nextPosition;
-        } while (!ValidPosition(directionArray, _currentPosition));
-
-        // Hunting phase here
-
+            // If unsuccessful walk start Hunting phase here
+            if (!walkedSuccessfully && !Hunt(directionArray)) 
+            {
+                break;
+            }
+        }
         return directionArray;
     }
 
+    private bool Walk(Direction[,] directionArray)
+    {
+        // Choose a random valid Direction 
+        Direction[] validDirections = getValidDirections(directionArray);
+        if (validDirections.Length == 0)
+        {
+            return false; // Unsuccessful walk
+        }
+
+        Direction randomValidDir = validDirections[_random.Next(0, validDirections.Length)];
+
+        // Next position info
+        MapVector nextPosition = randomValidDir + _currentPosition;
+        Direction oppositeDir = GetOppositeDirection(randomValidDir);
+
+        // Update current position
+        directionArray[_currentPosition.Y, _currentPosition.X] = directionArray[_currentPosition.Y, _currentPosition.X] | randomValidDir;
+
+        // Update next position 
+        directionArray[nextPosition.Y, nextPosition.X] = directionArray[nextPosition.Y, nextPosition.X] | oppositeDir;
+
+        // Update current position 
+        _currentPosition = nextPosition;
+        return true; // Successful walk
+    }
+
+    private bool Hunt(Direction[,] directionArray)
+    {
+
+        throw new NotImplementedException();
+    }
     static private Direction GetOppositeDirection(Direction dir)
     {
         Direction newDir;
@@ -110,8 +129,8 @@ public class MazeHuntKill : IMapProvider
     // Check if the next position is adjacent to the _currentPosition
     private bool IsAdjacent(MapVector nextPosition)
     {
-        if (nextPosition + Direction.S == _currentPosition || nextPosition + Direction.N == _currentPosition ||
-            nextPosition + Direction.E == _currentPosition || nextPosition + Direction.W == _currentPosition)
+        if (nextPosition - Direction.S == _currentPosition || nextPosition - Direction.N == _currentPosition ||
+            nextPosition - Direction.E == _currentPosition || nextPosition - Direction.W == _currentPosition)
         {
             return true;
         }

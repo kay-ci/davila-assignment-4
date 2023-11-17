@@ -17,12 +17,15 @@ namespace MazeGame.States
     {
         private readonly InputField _widthInput;
         private readonly InputField _heightInput;
+        private IMapProvider _mapProvider;
         private readonly TextField _errorBox;
         private readonly List<Component> _components;
+        private string _state;
 
-        public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content)
+        public InputState(MazeGame game, GraphicsDevice graphicsDevice, ContentManager content, IMapProvider mapProvider)
          : base(game, graphicsDevice, content)
         {
+            _mapProvider = mapProvider;
             var inputTexture = _content.Load<Texture2D>("Controls/button");
             var font = _content.Load<SpriteFont>("Fonts/font");
 
@@ -52,8 +55,11 @@ namespace MazeGame.States
                 Text = "Generate Maze!"
             };
 
-            // handle events
-            submitButton.Click += GenerateRecursiveMaze;
+            // handle if Recursive or  Hunt kill
+            
+            submitButton.Click += GenerateMaze;
+
+    
             _widthInput.Click += (s, e) =>
             {
                 _widthInput.IsSelected = true;
@@ -96,7 +102,7 @@ namespace MazeGame.States
             }
         }
 
-        private void GenerateRecursiveMaze(object sender, EventArgs e)
+        private void GenerateMaze(object sender, EventArgs e)
         {
             _errorBox.PenColour = Color.Red;
             //assuming valid num done in input field
@@ -106,10 +112,10 @@ namespace MazeGame.States
                 {
                     if ( width % 2 != 0 && height % 2 != 0)
                     {
-                        IMapProvider mapProvider = new MazeRecursion.MazeRecursion();
-                        Map recursiveMap = new(mapProvider, int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
+                        
+                        Map loadedMap = new(_mapProvider, int.Parse(_widthInput.Text), int.Parse(_heightInput.Text));
 
-                        _game.ChangeState(new GameState(_game, _graphicsDevice, _content, recursiveMap));
+                        _game.ChangeState(new GameState(_game, _graphicsDevice, _content, loadedMap));
                     }
                     else
                     {
@@ -126,5 +132,6 @@ namespace MazeGame.States
                 _errorBox.Text = "Please enter a width and height";
             }
         }
+
     }
 }
