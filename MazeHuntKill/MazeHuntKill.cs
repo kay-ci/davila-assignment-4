@@ -10,6 +10,12 @@ public class MazeHuntKill : IMapProvider
     public MazeHuntKill() 
     {
         _random = new Random();
+        _currentPosition = new MapVector(0,0);
+    }
+    public MazeHuntKill(int seed)
+    {
+        _random = new Random(seed);
+        _currentPosition = new MapVector(0, 0);
     }
     public Direction[,] CreateMap(int width, int height)
     {
