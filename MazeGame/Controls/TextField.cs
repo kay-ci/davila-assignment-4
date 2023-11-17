@@ -11,10 +11,13 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MazeGame.Controls
 {
+    /// <summary>
+    /// A textured component which displays text
+    /// </summary>
     public class TextField : Component
     {
        
-        private SpriteFont _font;
+        private readonly SpriteFont _font;
         public Color PenColour { get; set; }
         public Vector2 Position { get; set; }
         public string Text { get; set; }

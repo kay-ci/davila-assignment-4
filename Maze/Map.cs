@@ -134,7 +134,7 @@ namespace Maze
             }
             return false;
         }
-        private int ToGrid(int x)
+        private static int ToGrid(int x)
         {
             return x * 2 + 1;
         }

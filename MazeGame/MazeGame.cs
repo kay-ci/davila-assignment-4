@@ -13,6 +13,9 @@ using System.Drawing;
 
 namespace MazeGame
 {
+    /// <summary>
+    /// Game class implements Game and keeps track of the current state of the game
+    /// </summary>
     public class MazeGame : Game
     {
         private SpriteBatch _spriteBatch;

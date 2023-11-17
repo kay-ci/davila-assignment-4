@@ -1,10 +1,11 @@
 ﻿namespace MazeHuntKill;
 using Maze;
 using System.ComponentModel;
+using System.Diagnostics;
 
 public class MazeHuntKill : IMapProvider
 {
-    private Random _random;
+    private readonly Random _random;
     private bool[,]? _visitedArray;
     private MapVector _currentPosition;
     public MazeHuntKill() 
@@ -137,7 +138,7 @@ public class MazeHuntKill : IMapProvider
         foreach (var dir in directions)
         {
             MapVector nextPosition = dir + _currentPosition;
-            if (_visitedArray != null)
+            Debug.Assert(_visitedArray != null);
             if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
             {
                 if (_visitedArray[nextPosition.Y, nextPosition.X] == false)
@@ -162,7 +163,7 @@ public class MazeHuntKill : IMapProvider
             MapVector nextPosition = dir + position;
             if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
             {
-                if (_visitedArray != null)
+                Debug.Assert(_visitedArray != null);
                 if (_visitedArray[nextPosition.Y, nextPosition.X])
                 {
                         possibleDirection.Add(dir);

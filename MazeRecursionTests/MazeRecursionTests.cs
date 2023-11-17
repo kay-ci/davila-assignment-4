@@ -15,7 +15,7 @@ namespace MazeRecursion.Tests
         [TestMethod()]
         public void MazeRecursionTest()
         {
-            MazeRecursion mazeRecursion = new MazeRecursion(3);
+            MazeRecursion mazeRecursion = new(3);
             Assert.IsNotNull(mazeRecursion);
         }
 
@@ -23,7 +23,7 @@ namespace MazeRecursion.Tests
         public void CreateMapTest()
         {
             // If Initial position is [0,0]
-            MazeRecursion mazeRecursion = new MazeRecursion(0);
+            MazeRecursion mazeRecursion = new(0);
             Direction [,] dirArray = mazeRecursion.CreateMap(5, 5);
             Assert.IsNotNull(dirArray);
             Assert.AreEqual(Direction.E | Direction.S, dirArray[0, 0]);

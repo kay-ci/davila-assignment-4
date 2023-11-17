@@ -1,11 +1,12 @@
 ﻿namespace MazeRecursion;
 using System;
+using System.Diagnostics;
 using Maze;
 
 public class MazeRecursion : IMapProvider
 {
     private bool[,]? _visitedArray;
-    private Random _random;
+    private readonly Random _random;
     public MazeRecursion()
     {
         _random = new Random();
@@ -40,32 +41,30 @@ public class MazeRecursion : IMapProvider
 
     private Direction[,] Walk(MapVector currentPos, Direction[,] directionsArray)
     {
-        if (_visitedArray != null)
+        Debug.Assert(_visitedArray != null);
+        
+        _visitedArray[currentPos.Y, currentPos.X] = true;
+
+        // Shuffled enums
+        Direction[] enums = new Direction[] { Direction.N, Direction.E, Direction.S, Direction.W};
+        Direction[] shuffledEnums = Shuffle(_random, enums);
+
+        foreach (Direction dir in shuffledEnums)
         {
-            _visitedArray[currentPos.Y, currentPos.X] = true;
-
-            // Shuffled enums
-            Direction[] enums = new Direction[] { Direction.N, Direction.E, Direction.S, Direction.W};
-            Direction[] shuffledEnums = Shuffle(_random, enums);
-
-            foreach (Direction dir in shuffledEnums)
+                
+            var forwardPos = dir + currentPos;
+            var oppositeDir = GetOppositeDirection(dir);
+            if (forwardPos.InsideBoundary(directionsArray.GetLength(1), directionsArray.GetLength(0)))
             {
-                
-                var forwardPos = dir + currentPos;
-                var oppositeDir = GetOppositeDirection(dir);
-                if (forwardPos.InsideBoundary(directionsArray.GetLength(1), directionsArray.GetLength(0)))
+                if (!_visitedArray[forwardPos.Y, forwardPos.X])
                 {
-                    if (!_visitedArray[forwardPos.Y, forwardPos.X])
-                    {
-                        directionsArray[currentPos.Y, currentPos.X] = directionsArray[currentPos.Y, currentPos.X] | dir;
-                        directionsArray[forwardPos.Y, forwardPos.X] = directionsArray[forwardPos.Y, forwardPos.X] | oppositeDir;
-                        directionsArray = Walk(forwardPos, directionsArray);
-                    }
+                    directionsArray[currentPos.Y, currentPos.X] = directionsArray[currentPos.Y, currentPos.X] | dir;
+                    directionsArray[forwardPos.Y, forwardPos.X] = directionsArray[forwardPos.Y, forwardPos.X] | oppositeDir;
+                    directionsArray = Walk(forwardPos, directionsArray);
                 }
-                
-
             }
         }
+        
         return directionsArray;
     }
     static private Direction GetOppositeDirection(Direction dir)

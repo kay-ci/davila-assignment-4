@@ -22,7 +22,7 @@ namespace Maze
 
         public bool InsideBoundary(int width, int height)
         {
-            bool valid = false;
+            bool valid;
             if (X >= 0 && Y >= 0 && X < width && Y < height)
             {
                 valid = true;
