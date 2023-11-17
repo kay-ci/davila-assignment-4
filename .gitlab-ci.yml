@@ -28,7 +28,7 @@ deployment:
     - apt-get install zip libfreetype6 -y
   script:
     - cd MazeGame
-    - dotnet publish -c -r win-x64 -o ./publish_output --self-contained false
+    - dotnet publish -r win-x64 -o ./publish_output --self-contained false
     - zip -r ../MazeGame.zip ./publish_output/*
   artifacts:
     paths:
