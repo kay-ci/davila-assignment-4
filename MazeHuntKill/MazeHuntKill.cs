@@ -43,7 +43,7 @@ public class MazeHuntKill : IMapProvider
     private bool Walk(Direction[,] directionArray)
     {
         // Choose a random valid Direction 
-        Direction[] validDirections = getValidDirections(directionArray);
+        Direction[] validDirections = GetValidDirections(directionArray);
         if (validDirections.Length == 0)
         {
             return false; // Unsuccessful walk
@@ -68,8 +68,36 @@ public class MazeHuntKill : IMapProvider
 
     private bool Hunt(Direction[,] directionArray)
     {
+        for(int y = 0; y < directionArray.GetLength(0); y++)
+        {
+            for (int x = 0; x < directionArray.GetLength(1); x++)
+            {
+                if (directionArray[y, x] == Direction.None)
+                {
+                    MapVector huntPosition = new(x, y);
 
-        throw new NotImplementedException();
+                    Direction[] validDirections = GetValidDirectionsForHunt(directionArray, huntPosition);
+                    if (validDirections.Length > 0)
+                    {
+                        Direction validDir = validDirections[_random.Next(0,validDirections.Length)];
+                        MapVector nextPosition = validDir + huntPosition;
+                        Direction oppositeDir = GetOppositeDirection(validDir);
+
+                        directionArray[huntPosition.Y, huntPosition.X] = directionArray[huntPosition.Y, _currentPosition.X] | validDir;
+
+                        // Update next position 
+                        directionArray[nextPosition.Y, nextPosition.X] = directionArray[nextPosition.Y, nextPosition.X] | oppositeDir;
+
+                        // Update current position 
+                        _currentPosition = nextPosition;
+                        return true; // Successful walk
+
+                    }
+
+                }
+            }
+        }
+        return false;
     }
     static private Direction GetOppositeDirection(Direction dir)
     {
@@ -94,22 +122,8 @@ public class MazeHuntKill : IMapProvider
         }
         return newDir;
     }
-    private bool ValidPosition(Direction[,] directionArray, MapVector nextPosition)
-    {
-        if (_visitedArray != null)
-        {
-            if (_visitedArray[nextPosition.Y, nextPosition.X] == false)
-            {
-                if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)) && IsAdjacent(nextPosition))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
-    private Direction[] getValidDirections(Direction[,] directionArray)
+    private Direction[] GetValidDirections(Direction[,] directionArray)
     {
         var directions = new Direction[] { Direction.S, Direction.W, Direction.N, Direction.E };
         var possibleDirection = new List<Direction>();
@@ -117,24 +131,40 @@ public class MazeHuntKill : IMapProvider
         foreach (var dir in directions)
         {
             MapVector nextPosition = dir + _currentPosition;
-            if (ValidPosition(directionArray, nextPosition))
+            if (_visitedArray != null)
+            if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
             {
-                possibleDirection.Add(dir);
+                if (_visitedArray[nextPosition.Y, nextPosition.X] == false)
+                {
+                    possibleDirection.Add(dir);
+                }
+                
             }
 
         }
         return possibleDirection.ToArray();
     }
 
-    // Check if the next position is adjacent to the _currentPosition
-    private bool IsAdjacent(MapVector nextPosition)
+    // Get the valid directions for the hunting phase
+    private Direction[] GetValidDirectionsForHunt(Direction[,] directionArray, MapVector position)
     {
-        if (nextPosition - Direction.S == _currentPosition || nextPosition - Direction.N == _currentPosition ||
-            nextPosition - Direction.E == _currentPosition || nextPosition - Direction.W == _currentPosition)
+        var directions = new Direction[] { Direction.S, Direction.W, Direction.N, Direction.E };
+        var possibleDirection = new List<Direction>();
+
+        foreach (var dir in directions)
         {
-            return true;
+            MapVector nextPosition = dir + position;
+            if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
+            {
+                if (_visitedArray != null)
+                if (_visitedArray[nextPosition.Y, nextPosition.X])
+                {
+                        possibleDirection.Add(dir);
+                }
+            }
+
         }
-        return false;
+        return possibleDirection.ToArray();
     }
     public Direction[,] CreateMap()
     {
