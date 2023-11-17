@@ -69,7 +69,7 @@ internal class MazeHuntKill : IMapProvider
     private bool Walk(Direction[,] directionArray)
     {
         // Choose a random valid Direction 
-        Direction[] validDirections = GetValidDirections(directionArray);
+        Direction[] validDirections = GetValidDirections(directionArray, _currentPosition, false);
         if (validDirections.Length == 0)
         {
             return false; // Unsuccessful walk
@@ -92,17 +92,23 @@ internal class MazeHuntKill : IMapProvider
         return true; // Successful walk
     }
 
+    /// <summary>
+    /// Loop through directionArray for a position with no direction and connect it with the rest of the maze
+    /// </summary>
+    /// <param name="directionArray"></param>
+    /// <returns></returns>
     private bool Hunt(Direction[,] directionArray)
     {
         for(int y = 0; y < directionArray.GetLength(0); y++)
         {
             for (int x = 0; x < directionArray.GetLength(1); x++)
             {
+                Debug.Assert(_visitedArray != null);
                 if (directionArray[y, x] == Direction.None)
                 {
                     MapVector huntPosition = new(x, y);
 
-                    Direction[] validDirections = GetValidDirectionsForHunt(directionArray, huntPosition);
+                    Direction[] validDirections = GetValidDirections(directionArray, huntPosition, true);
                     if (validDirections.Length > 0)
                     {
                         Direction validDir = validDirections[_random.Next(0, validDirections.Length)];
@@ -125,6 +131,35 @@ internal class MazeHuntKill : IMapProvider
         }
         return false;
     }
+    /// <summary>
+    /// Get the valid directions for the hunting phase
+    /// </summary>
+    /// <param name="directionArray"></param>
+    /// <param name="position">The current position</param>
+    /// <param name="nextPosIsVisited">bool which checks if the next position has been visited</param>
+    /// <returns></returns>
+    private Direction[] GetValidDirections(Direction[,] directionArray, MapVector position, bool nextPosIsVisited)
+    {
+        var directions = new Direction[] { Direction.S, Direction.W, Direction.N, Direction.E };
+        var possibleDirection = new List<Direction>();
+
+        foreach (var dir in directions)
+        {
+            MapVector nextPosition = dir + position;
+
+            Debug.Assert(_visitedArray != null);
+            if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
+            {
+                if (_visitedArray[nextPosition.Y, nextPosition.X] == nextPosIsVisited)
+                {
+                    possibleDirection.Add(dir);
+                }
+            }
+
+        }
+        return possibleDirection.ToArray();
+    }
+
     static private Direction GetOppositeDirection(Direction dir)
     {
         Direction newDir;
@@ -149,50 +184,7 @@ internal class MazeHuntKill : IMapProvider
         return newDir;
     }
 
-    private Direction[] GetValidDirections(Direction[,] directionArray)
-    {
-        var directions = new Direction[] { Direction.S, Direction.W, Direction.N, Direction.E };
-        var possibleDirection = new List<Direction>();
-
-        foreach (var dir in directions)
-        {
-            MapVector nextPosition = dir + _currentPosition;
-            Debug.Assert(_visitedArray != null);
-            if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
-            {
-                if (_visitedArray[nextPosition.Y, nextPosition.X] == false)
-                {
-                    possibleDirection.Add(dir);
-                }
-                
-            }
-
-        }
-        return possibleDirection.ToArray();
-    }
-
-    // Get the valid directions for the hunting phase
-    private Direction[] GetValidDirectionsForHunt(Direction[,] directionArray, MapVector position)
-    {
-        var directions = new Direction[] { Direction.S, Direction.W, Direction.N, Direction.E };
-        var possibleDirection = new List<Direction>();
-
-        foreach (var dir in directions)
-        {
-            MapVector nextPosition = dir + position;
-            if (nextPosition.InsideBoundary(directionArray.GetLength(1), directionArray.GetLength(0)))
-            {
-                Debug.Assert(_visitedArray != null);
-                if (_visitedArray[nextPosition.Y, nextPosition.X])
-                {
-                        possibleDirection.Add(dir);
-                }
-            }
-
-        }
-        return possibleDirection.ToArray();
-    }
-
+    
     /// <summary>
     /// Creates a Direction array with default size 9x7 using Hunt and Kill algorithm
     /// </summary>
