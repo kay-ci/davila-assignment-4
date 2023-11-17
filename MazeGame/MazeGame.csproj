@@ -18,6 +18,7 @@
     <PackageReference Include="NLog" Version="5.2.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MazeHuntKill\MazeHuntKill.csproj" />
     <ProjectReference Include="..\MazeRecursion\MazeRecursion.csproj" />
     <ProjectReference Include="..\Maze\Maze.csproj" />
   </ItemGroup>

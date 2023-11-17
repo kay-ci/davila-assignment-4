@@ -9,23 +9,20 @@ using System.Threading.Tasks;
 
 namespace MazeGame.Controls
 {
+    /// <summary>
+    /// Button component displays a button with text and handles the mouse state
+    /// </summary>
     public class Button : Component
     {
-        #region Fields
-
         private MouseState _currentMouse;
 
-        private SpriteFont _font;
+        private readonly SpriteFont _font;
 
         private bool _isHovering;
 
         private MouseState _previousMouse;
 
-        private Texture2D _texture;
-
-        #endregion
-
-        #region Properties
+        private readonly Texture2D _texture;
 
         public event EventHandler Click;
 
@@ -35,6 +32,7 @@ namespace MazeGame.Controls
 
         public Vector2 Position { get; set; }
 
+        // Represents our button texture
         public Rectangle Rectangle
         {
             get
@@ -44,10 +42,6 @@ namespace MazeGame.Controls
         }
 
         public string Text { get; set; }
-
-        #endregion
-
-        #region Methods
 
         public Button(Texture2D texture, SpriteFont font)
         {
@@ -62,6 +56,7 @@ namespace MazeGame.Controls
         {
             var colour = Color.White;
 
+            // Change color on hover
             if (_isHovering)
                 colour = Color.Gray;
 
@@ -69,6 +64,7 @@ namespace MazeGame.Controls
 
             if (!string.IsNullOrEmpty(Text))
             {
+                // Center text
                 var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2);
                 var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);
 
@@ -95,7 +91,5 @@ namespace MazeGame.Controls
                 }
             }
         }
-
-        #endregion
     }
 }

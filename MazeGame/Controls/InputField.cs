@@ -14,17 +14,20 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace MazeGame.Controls
 {
+    /// <summary>
+    /// Creates a number input field for the user to input maze width and height.
+    /// </summary>
     public class InputField : Component
     {
         private MouseState _currentMouse;
         private MouseState _previousMouse;
-        private InputManager _inputManager;
-        private Texture2D _texture;
+        private readonly InputManager _inputManager;
+        private readonly Texture2D _texture;
         private bool _isHovering;
 
         public event EventHandler Click;
         public bool IsSelected { get; set; }
-        public String Text { get; set; }
+        public string Text { get; set; }
         private SpriteFont _font { get; set; }
         private Vector2 _position { get; set; }
         public Rectangle Rectangle

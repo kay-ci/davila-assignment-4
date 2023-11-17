@@ -6,9 +6,13 @@ using System.Drawing;
 using Maze;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
+using System;
 
 namespace MazeGame.States
 {
+    /// <summary>
+    /// State class which draws the maze, player and goal using a Map
+    /// </summary>
     public class GameState : State
     {
         private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
@@ -18,7 +22,7 @@ namespace MazeGame.States
         private Texture2D _pathTexture;
         private Texture2D _solidTexture;
         private PlayerSprite _player;
-        private Map _map;
+        private readonly Map _map;
         private bool _isInitialized;
         
 
