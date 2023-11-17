@@ -32,7 +32,7 @@ public class MazeRecursionTests
         Direction[,] dirArray = mazeRecursion.CreateMap(9, 7);
         Assert.IsNotNull(dirArray);
         Assert.AreEqual(Direction.S, dirArray[0, 0]);
-        Assert.AreEqual(Direction.E | Direction.S | Direction.W, dirArray[0, 1]);
+        Assert.AreEqual(Direction.E | Direction.S, dirArray[0, 1]);
         Assert.AreEqual(Direction.E | Direction.S | Direction.W, dirArray[0, 2]);
         Assert.AreEqual(Direction.W, dirArray[0, 3]);
 

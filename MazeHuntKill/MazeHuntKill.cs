@@ -82,10 +82,10 @@ internal class MazeHuntKill : IMapProvider
         Direction oppositeDir = GetOppositeDirection(randomValidDir);
 
         // Update current position
-        directionArray[_currentPosition.Y, _currentPosition.X] = directionArray[_currentPosition.Y, _currentPosition.X] | randomValidDir;
+        directionArray[_currentPosition.Y, _currentPosition.X] |= randomValidDir;
 
         // Update next position 
-        directionArray[nextPosition.Y, nextPosition.X] = directionArray[nextPosition.Y, nextPosition.X] | oppositeDir;
+        directionArray[nextPosition.Y, nextPosition.X] |= oppositeDir;
 
         // Update current position 
         _currentPosition = nextPosition;
@@ -105,14 +105,14 @@ internal class MazeHuntKill : IMapProvider
                     Direction[] validDirections = GetValidDirectionsForHunt(directionArray, huntPosition);
                     if (validDirections.Length > 0)
                     {
-                        Direction validDir = validDirections[_random.Next(0,validDirections.Length)];
+                        Direction validDir = validDirections[_random.Next(0, validDirections.Length)];
                         MapVector nextPosition = validDir + huntPosition;
                         Direction oppositeDir = GetOppositeDirection(validDir);
 
-                        directionArray[huntPosition.Y, huntPosition.X] = directionArray[huntPosition.Y, _currentPosition.X] | validDir;
+                        directionArray[huntPosition.Y, huntPosition.X] |= validDir;
 
                         // Update next position 
-                        directionArray[nextPosition.Y, nextPosition.X] = directionArray[nextPosition.Y, nextPosition.X] | oppositeDir;
+                        directionArray[nextPosition.Y, nextPosition.X] |= oppositeDir;
 
                         // Update current position 
                         _currentPosition = nextPosition;
