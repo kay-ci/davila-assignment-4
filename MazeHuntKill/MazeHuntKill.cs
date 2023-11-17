@@ -192,8 +192,16 @@ internal class MazeHuntKill : IMapProvider
         }
         return possibleDirection.ToArray();
     }
+
+    /// <summary>
+    /// Creates a Direction array with default size 9x7 using Hunt and Kill algorithm
+    /// </summary>
+    /// <returns>Direction[,]</returns>
     public Direction[,] CreateMap()
     {
-        throw new NotImplementedException();
+        int defaultWidth = 9;
+        int defaultHeight = 7;
+
+        return CreateMap(defaultWidth, defaultHeight);
     }
 }
